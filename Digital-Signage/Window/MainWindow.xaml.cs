@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Aspose.Slides;
 using Aspose.Slides.Export;
 using System.Drawing;
+using Microsoft.Win32;
 
 namespace Digital_Signage
 {
@@ -24,6 +25,10 @@ namespace Digital_Signage
         private int previousVideoIndex = -1; // Index of the previously played video
         private bool isSlidePlaying = false;
         private DispatcherTimer timer; // Timer for slideshow
+        int powerpointChance = 0;
+        int videoChance = 0;
+        int imageChance = 0;
+        int levelImageChance = 0;
 
         private bool isVideo = false; // Flag to indicate if the current media is a video
 
@@ -33,6 +38,52 @@ namespace Digital_Signage
             mediaCollection = new MediaCollection();
             timer = new DispatcherTimer();
             timer.Tick += timerTick;
+            GC.Collect();
+        }
+
+        public void CheckAndRetrieveRegistryValues()
+        {
+            const string baseKey = "HKEY_CURRENT_USER";
+            const string subKey = "DigiSign";
+            const string levelImagesValue = "Level Images";
+            const string imagesValue = "Images";
+            const string powerPointValue = "PowerPoint";
+            const string videosValue = "Videos";
+
+            try
+            {
+                RegistryKey digiSignKey = Registry.CurrentUser.OpenSubKey(subKey);
+                if (digiSignKey == null)
+                {
+                    // Key doesn't exist, create the key and add values
+                    Registry.CurrentUser.CreateSubKey(subKey);
+
+                    Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, string.Empty);
+                    Registry.SetValue($"{baseKey}\\{subKey}", powerPointValue, string.Empty);
+                    Registry.SetValue($"{baseKey}\\{subKey}", videosValue, string.Empty);
+
+                    Console.WriteLine("Registry key and values created successfully!");
+                }
+                else
+                {
+                    // Key exists, retrieve values and populate textboxes
+                    string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
+                    string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
+                    string powerPoint = digiSignKey.GetValue(powerPointValue, string.Empty) as string;
+                    string videos = digiSignKey.GetValue(videosValue, string.Empty) as string;
+
+                    // Assuming you have four textboxes: textBox1, textBox2, textBox3, textBox4
+                    levelImageChance = int.Parse(levelImages);
+                    powerpointChance = int.Parse(powerPoint);
+                    videoChance = int.Parse(videos);
+
+                    Console.WriteLine("Registry values retrieved and populated successfully!");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
 
         private List<string> ExtractPowerPointSlides(string folderPath, string outputFolder)
@@ -85,6 +136,9 @@ namespace Digital_Signage
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //Retreive configuration from registry
+            CheckAndRetrieveRegistryValues();
+
             // Specify the base folder path
             string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
 
@@ -154,6 +208,7 @@ namespace Digital_Signage
 
         private void timerTick(object sender, EventArgs e)
         {
+            GC.Collect();
             if (isVideoPlaying)
             {
                 return;
@@ -179,7 +234,7 @@ namespace Digital_Signage
                 isSlidePlaying = false;
             }
 
-            if (slideCount % 6 == 0)
+            if (slideCount % levelImageChance == 0)
             {
                 // Show image level
                 int levelIndex = 1;
@@ -223,16 +278,16 @@ namespace Digital_Signage
         private bool ShouldPlayVideo()
         {
             // Determine if the current slide should be a video or image based on some condition
-            // In this example, we will randomly decide to play a video 20% of the time
+            // In this example, we will randomly decide to play a video 10% of the time
             Random random = new Random();
-            return random.Next(100) < 10;
+            return random.Next(100) < videoChance;
         }
         private bool ShouldPlaySlide()
         {
             // Determine if the current slide should be a video or image based on some condition
             // In this example, we will randomly decide to play a slide 10% of the time
             Random random = new Random();
-            if (random.Next(100) < 10)
+            if (random.Next(100) < powerpointChance)
             {
                 isSlidePlaying = true;
                 return true;
