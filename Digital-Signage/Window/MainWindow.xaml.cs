@@ -46,7 +46,6 @@ namespace Digital_Signage
             const string baseKey = "HKEY_CURRENT_USER";
             const string subKey = "DigiSign";
             const string levelImagesValue = "Level Images";
-            const string imagesValue = "Images";
             const string powerPointValue = "PowerPoint";
             const string videosValue = "Videos";
 
@@ -68,7 +67,6 @@ namespace Digital_Signage
                 {
                     // Key exists, retrieve values and populate textboxes
                     string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
-                    string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
                     string powerPoint = digiSignKey.GetValue(powerPointValue, string.Empty) as string;
                     string videos = digiSignKey.GetValue(videosValue, string.Empty) as string;
 

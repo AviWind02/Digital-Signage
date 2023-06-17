@@ -42,7 +42,6 @@ namespace DigiSign_Config_Editor
             const string baseKey = "HKEY_CURRENT_USER";
             const string subKey = "DigiSign";
             const string levelImagesValue = "Level Images";
-            const string imagesValue = "Images";
             const string powerPointValue = "PowerPoint";
             const string videosValue = "Videos";
 
