@@ -49,6 +49,7 @@ namespace Digital_Signage
             const string levelImagesValue = "Level Images";
             const string powerPointValue = "PowerPoint";
             const string videosValue = "Videos";
+            const string imagesValue = "Images";
 
             try
             {
@@ -61,6 +62,8 @@ namespace Digital_Signage
                     Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, string.Empty);
                     Registry.SetValue($"{baseKey}\\{subKey}", powerPointValue, string.Empty);
                     Registry.SetValue($"{baseKey}\\{subKey}", videosValue, string.Empty);
+                    Registry.SetValue($"{baseKey}\\{subKey}", imagesValue, string.Empty);
+
 
                     Console.WriteLine("Registry key and values created successfully!");
                 }
@@ -70,11 +73,14 @@ namespace Digital_Signage
                     string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
                     string powerPoint = digiSignKey.GetValue(powerPointValue, string.Empty) as string;
                     string videos = digiSignKey.GetValue(videosValue, string.Empty) as string;
+                    string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
+
 
                     // Assuming you have four textboxes: textBox1, textBox2, textBox3, textBox4
                     levelImageChance = int.Parse(levelImages);
                     powerpointChance = int.Parse(powerPoint);
                     videoChance = int.Parse(videos);
+                    imageChance = int.Parse(images);
 
                     Console.WriteLine("Registry values retrieved and populated successfully!");
                 }
@@ -261,7 +267,7 @@ namespace Digital_Signage
                     Console.WriteLine($"Showing Video: {mediaCollection.Videos[currentIndex]}");
                     isVideoPlaying = true;
                 }
-                else
+                if(ShouldShowImage())
                 {
                     // Show image
                     currentIndex = GetRandomIndex(mediaCollection.Images);
@@ -274,6 +280,13 @@ namespace Digital_Signage
             }
         }
 
+        private bool ShouldShowImage()
+        {
+            // Determine if the current slide should be a video or image based on some condition
+            // In this example, we will randomly decide to play a video 10% of the time
+            Random random = new Random();
+            return random.Next(100) < imageChance;
+        }
         private bool ShouldPlayVideo()
         {
             // Determine if the current slide should be a video or image based on some condition

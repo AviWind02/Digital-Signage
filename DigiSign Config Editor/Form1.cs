@@ -38,6 +38,7 @@ namespace DigiSign_Config_Editor
                 Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, textBox2.Text);
                 Registry.SetValue($"{baseKey}\\{subKey}", powerPointValue, textBox3.Text);
                 Registry.SetValue($"{baseKey}\\{subKey}", videosValue, textBox4.Text);
+                Registry.SetValue($"{baseKey}\\{subKey}", imagesValue, textBox1.Text);
                 MessageBox.Show("Values saved successfully", "Take a chance on me", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
 
             }
@@ -65,6 +66,8 @@ namespace DigiSign_Config_Editor
                     Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, string.Empty);
                     Registry.SetValue($"{baseKey}\\{subKey}", powerPointValue, string.Empty);
                     Registry.SetValue($"{baseKey}\\{subKey}", videosValue, string.Empty);
+                    Registry.SetValue($"{baseKey}\\{subKey}", imagesValue, string.Empty);
+
 
                     Console.WriteLine("Registry key and values created successfully!");
                 }
@@ -74,11 +77,14 @@ namespace DigiSign_Config_Editor
                     string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
                     string powerPoint = digiSignKey.GetValue(powerPointValue, string.Empty) as string;
                     string videos = digiSignKey.GetValue(videosValue, string.Empty) as string;
+                    string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
+
 
                     // Assuming you have four textboxes: textBox1, textBox2, textBox3, textBox4
                     textBox2.Text = levelImages;
                     textBox3.Text = powerPoint;
                     textBox4.Text = videos;
+                    textBox1.Text = images;
 
                     Console.WriteLine("Registry values retrieved and populated successfully!");
                 }
