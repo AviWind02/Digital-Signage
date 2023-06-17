@@ -9,6 +9,8 @@ This repository contains the code for a Digital Signage application developed in
 - Shows PowerPoint presentations (currently under bug fixing)
 - Supports the addition of media while the application is running (work in progress)
 - Provides a user interface for managing images and running text (work in progress)
+- Local configurator application to allow you to customise the chances of videos, powerpoint slides, and level images showing.
+- Configuration stored in registry allowing remote administration of the config via GPO (Group Policy Object)
 
 ![image](https://github.com/AviWind02/Digital-Signage/assets/59033172/045b4992-f1f1-4575-8399-aeb719c456f5)
 
