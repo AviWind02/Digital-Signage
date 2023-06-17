@@ -1,4 +1,4 @@
-###Digital Signage Project
+##Digital Signage Project
 
 This repository contains the code for a Digital Signage application developed in C#. The application is designed to display a variety of media content, including images, PowerPoint presentations, and videos, on a digital screen in the form of a slideshow. Additionally, the application introduces a concept called "level images," which are images that appear more frequently than other media content, allowing users to prioritize certain visuals.
 
