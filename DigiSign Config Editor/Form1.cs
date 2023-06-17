@@ -27,16 +27,17 @@ namespace DigiSign_Config_Editor
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             if(textBox2.Text.Equals("")|| textBox3.Text.Equals("") || textBox4.Text.Equals(""))
             {
                 MessageBox.Show("One of the values is blank!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2);
             }
+
             else
             {
                 Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, textBox2.Text);
                 Registry.SetValue($"{baseKey}\\{subKey}", powerPointValue, textBox3.Text);
                 Registry.SetValue($"{baseKey}\\{subKey}", videosValue, textBox4.Text);
-
                 MessageBox.Show("Values saved successfully", "Take a chance on me", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
 
             }

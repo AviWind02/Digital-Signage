@@ -38,11 +38,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textBox4);
             this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.textBox2);
@@ -76,7 +78,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(82, 19);
+            this.textBox2.Location = new System.Drawing.Point(130, 20);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(27, 20);
             this.textBox2.TabIndex = 9;
@@ -105,9 +107,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 23);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 13);
+            this.label4.Size = new System.Drawing.Size(127, 13);
             this.label4.TabIndex = 3;
-            this.label4.Text = "Level Images:";
+            this.label4.Text = "Show level images every ";
             // 
             // label3
             // 
@@ -137,6 +139,15 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(159, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "images.";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -165,6 +176,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label1;
     }
 }
 
