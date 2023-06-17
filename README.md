@@ -33,7 +33,7 @@ To run this application locally, follow these steps:
 
 Once the application is up and running, it will continuously cycle through the available media content, displaying them on the digital screen. The frequency of "level images" can be adjusted to control how often they appear compared to other images.
 
-To add new media content while the application is running, follow these steps:
+To add new media content while the application is running, follow these steps(work in progress):
 
 1. Place the desired image or video file in the designated directory.
 
