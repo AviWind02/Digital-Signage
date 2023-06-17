@@ -41,6 +41,7 @@ namespace Digital_Signage
             GC.Collect();
         }
 
+        //Checks to see if the key "Computer\HKEY_CURRENT_USER\DigiSign" exists and gets the values under that key.
         public void CheckAndRetrieveRegistryValues()
         {
             const string baseKey = "HKEY_CURRENT_USER";

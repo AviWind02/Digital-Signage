@@ -36,6 +36,7 @@ namespace DigiSign_Config_Editor
 
         }
 
+        //Checks to see if the key "Computer\HKEY_CURRENT_USER\DigiSign" exists and gets the values under that key.
 
         public void CheckAndRetrieveRegistryValues()
         {
