@@ -1,4 +1,11 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * The MediaCollection class stores lists of different types of media
+ * used in the digital signage application,including images, image levels, 
+ * PowerPoint slide images, and videos. It provides a convenient way to 
+ * organize and access these media items.
+ */
+using System.Collections.Generic;
 
 namespace Digital_Signage
 {
