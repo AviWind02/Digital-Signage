@@ -9,6 +9,8 @@ using System.Collections.Generic;
 
 namespace Digital_Signage
 {
+
+ 
     internal class MediaCollection
     {
 
@@ -24,6 +26,12 @@ namespace Digital_Signage
             PowerpointImages = new List<string>();
             Videos = new List<string>();
         }
+
+    }
+    internal class MediaCollection_powerpoint
+    {
+        public List<string> Powerpoint { get; set; }
+        public List<string> Powerpointsildes { get; set; }
 
     }
 }

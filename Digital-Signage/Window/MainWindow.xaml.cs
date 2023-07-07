@@ -12,6 +12,7 @@ using System.Drawing;
 using Microsoft.Win32;
 using Digital_Signage.Classes;
 using System.Linq;
+using Aspose.Slides.MathText;
 
 namespace Digital_Signage
 {
@@ -22,7 +23,7 @@ namespace Digital_Signage
         private NumericStringComparer numericStringComparer;
         private int currentIndex = 0; // Index of the currently displayed media
         private int currentIndexOfSlide = 0; // Index of the currently displayed media
-        private int imageSlideDelay = 500;// Delay for each image slide
+        private int imageSlideDelay = 50;// Delay for each image slide
         private int slideCount = 0; // Counter for the number of slides displayed
         private bool isVideoPlaying = false; // Flag to indicate if a video is currently playing
         private int previousVideoIndex = -1; // Index of the previously played video
@@ -32,9 +33,20 @@ namespace Digital_Signage
         private int powerpointChance = 25;
         private int videoChance = 50;
         private int imageChance = 50;
-        private int levelImageChance = 50;
+        private int levelImageChance = 5;
 
         private bool isVideo = false; // Flag to indicate if the current media is a video
+
+
+        enum Mediatypes
+        {
+            Image,
+            Video,
+            PPT,
+            LevelImage
+        };
+
+
 
         public MainWindow()
         {
@@ -112,7 +124,7 @@ namespace Digital_Signage
             string imagesFolderPath = Path.Combine(baseFolderPath, "Images");
             string levelImagesFolderPath = Path.Combine(baseFolderPath, "Level Images");
             string powerpointFolderPath = Path.Combine(baseFolderPath, "PowerPoint");
-            string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "Images\\PowerPointImages");
+            string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
             string videosFolderPath = Path.Combine(baseFolderPath, "Videos");
 
             // Get media from each folder
@@ -123,7 +135,11 @@ namespace Digital_Signage
             GetMediaFromFolder(videosFolderPath, mediaCollection.Videos);
 
 
-            loadingpptx = true;
+
+
+            /*
+
+             */
 
 
 
@@ -181,37 +197,14 @@ namespace Digital_Signage
         private void timerTick(object sender, EventArgs e)
         {
             GC.Collect();
+            //If playing video let is play till donw. this will be false once media ends 
             if (isVideoPlaying)
             {
                 return;
             }
             slideCount++;
 
-            ShouldPlaySlide();
-            if (isSlidePlaying)
-            {
-                // If we still have PowerPoint slides to show, show the next one
-                if (currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
-                {
-                    //-1 is when the pptx runs out
-                    if (currentIndexOfSlide == -1)
-                    {
-                        isSlidePlaying = false;
-                        return;
-                    }
-                    imageControl.Visibility = Visibility.Visible;
-                    mediaElement.Visibility = Visibility.Collapsed;
-                    imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndexOfSlide]));
-                    Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndexOfSlide]}");
-                    currentIndexOfSlide = GetNextPowerPointSlideIndex();
-                    StartImageSlideDelay(); // Start the delay for image slides
-                    return;
-                }
-                currentIndexOfSlide = 0;
-                isSlidePlaying = false;
-            }
-
-            if (slideCount % levelImageChance == 0)
+            if (slideCount % 6 == 0)
             {
                 // Show image level
                 int levelIndex = 1;
@@ -237,29 +230,85 @@ namespace Digital_Signage
                     Console.WriteLine($"Showing Video: {mediaCollection.Videos[currentIndex]}");
                     isVideoPlaying = true;
                 }
-                else if (ShouldShowImage())
+                else
                 {
-                    if (currentIndex >= 0 && currentIndex < mediaCollection.PowerpointImages.Count)
-                    {
-                        imageControl.Visibility = Visibility.Visible;
-                        mediaElement.Visibility = Visibility.Collapsed;
-                        Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndex]}");
-                        imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndex]));
-                        currentIndexOfSlide = currentIndex + 1; // Move to the next slide index
-                        StartImageSlideDelay(); // Start the delay for image slides
-                    }
-                    else
-                    {
-                        // No more PowerPoint slides, show regular image
-                        currentIndex = GetRandomIndex(mediaCollection.Images);
-                        imageControl.Visibility = Visibility.Visible;
-                        mediaElement.Visibility = Visibility.Collapsed;
-                        Console.WriteLine($"Showing Image: {mediaCollection.Images[currentIndex]}");
-                        imageControl.Source = new BitmapImage(new Uri(mediaCollection.Images[currentIndex]));
-                        StartImageSlideDelay(); // Start the delay for image slides
-                    }
+                    //No more PowerPoint slides, show regular image
+                    currentIndex = GetRandomIndex(mediaCollection.Images);
+                    imageControl.Visibility = Visibility.Visible;
+                    mediaElement.Visibility = Visibility.Collapsed;
+                    Console.WriteLine($"Showing Image: {mediaCollection.Images[currentIndex]}");
+                    imageControl.Source = new BitmapImage(new Uri(mediaCollection.Images[currentIndex]));
+                    StartImageSlideDelay(); // Start the delay for image slides
                 }
+
+            
             }
+
+
+
+
+
+
+            //ShouldPlaySlide();
+            //if (isSlidePlaying)
+            //{
+            //    // If we still have PowerPoint slides to show, show the next one
+            //    if (currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
+            //    {
+            //        //-1 is when the pptx runs out
+            //        if (currentIndexOfSlide == -1)
+            //        {
+            //            isSlidePlaying = false;
+            //            return;
+            //        }
+            //        imageControl.Visibility = Visibility.Visible;
+            //        mediaElement.Visibility = Visibility.Collapsed;
+            //        imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndexOfSlide]));
+            //        Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndexOfSlide]}");
+            //        currentIndexOfSlide = GetNextPowerPointSlideIndex();
+            //        StartImageSlideDelay(); // Start the delay for image slides
+            //        return;
+            //    }
+            //    currentIndexOfSlide = 0;
+            //    isSlidePlaying = false;
+            //}
+
+
+            //else
+            //{
+            //    if (ShouldPlayVideo())
+            //    {
+            //        // Show video
+            //        currentIndex = GetRandomIndex(mediaCollection.Videos, previousVideoIndex);
+            //        previousVideoIndex = currentIndex;
+            //        imageControl.Visibility = Visibility.Collapsed;
+            //        mediaElement.Visibility = Visibility.Visible;
+            //        mediaElement.Source = new Uri(mediaCollection.Videos[currentIndex]);
+            //        mediaElement.Play();
+            //        Console.WriteLine($"Showing Video: {mediaCollection.Videos[currentIndex]}");
+            //        isVideoPlaying = true;
+            //    }
+            //    else if (ShouldShowImage())
+            //    {
+
+            //       
+
+
+            //        //if (currentIndex >= 0 && currentIndex < mediaCollection.PowerpointImages.Count)
+            //        //{
+            //        //    imageControl.Visibility = Visibility.Visible;
+            //        //    mediaElement.Visibility = Visibility.Collapsed;
+            //        //    Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndex]}");
+            //        //    imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndex]));
+            //        //    currentIndexOfSlide = currentIndex + 1; // Move to the next slide index
+            //        //    StartImageSlideDelay(); // Start the delay for image slides
+            //        //}
+            //        //else
+            //        //{
+
+            //        //}
+            //    }
+            //}
         }
 
 
