@@ -117,7 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="folderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>Credits:
+Developed by Daniel Frohawk &amp; Aviraj Gill (2023)
+
+This configurator should be run before executing the Digital Signage Software itself.
+
+Introduction
+Mr. Frohawk's Digital Signage Solution for schools offers a versatile platform for displaying videos, images, and PowerPoint presentations. Designed with simplicity and flexibility in mind, this software empowers end-users to create captivating digital displays for educational environments.
+
+Configuration
+1. Folder Path Selection
+The first section allows you to specify a folder path from which the software will operate. This feature is particularly valuable when setting up multiple instances of the software. It provides the flexibility to curate different content for various screens, rather than relying on a single directory. However, if you prefer all screens to share the same content directory, you can configure them accordingly. This can be advantageous, especially for installations in hallways and common areas.
+
+2. Custom Frequency Settings
+The second section of the configurator enables you to customize the frequency at which images, videos, and PowerPoint presentations are displayed. This user-friendly approach ensures that you can easily tailor the signage to your specific needs, delivering content at the desired intervals.
+
+3. "Level Images" for School-Wide Messages
+For schools employing a "Red, Amber, Green" system to convey important messages, this software offers the capability to display "Level Images." These images can be used to broadcast school-wide alerts or status updates. The software opens a port on the host machine, allowing school administrators (using the signage admin software) to remotely set the status to "Red," "Amber," or "Green" on specific signs. Please note that this feature can be overridden by the configurator, but it requires a password for security.
+
+Securing Your Digital Signs
+To prevent unauthorized access and maintain the integrity of your digital signage system, it's essential to implement robust security measures. Here's a simple guide for system administrators to safeguard your signs:
+
+1. Directory Permissions
+Set up strict permissions on the directory where your digital signage content is stored. This step ensures that only authorized users can modify or access the content. Restrict access to yourself and the sign user account. To further enhance security, consider using a dedicated global account that automatically logs onto the computer, ensuring seamless operation.
+
+2. Common Startup for Automated Boot
+For hassle-free operation, configure a global account that automatically logs onto the computer. Place the signage software in the common startup folder to ensure that the software starts running automatically when the computer restarts or power is restored after an outage. You can access the common startup folder by typing "shell:common startup" into the Windows Run box. This setup minimizes downtime and eliminates the need to manually log in to each sign individually.
+
+3. Registry Configuration
+All configuration settings for your digital signs are managed through the Windows Registry. These registry keys are created after you run the configurator for the first time. Savvy system administrators can take advantage of this by setting up Group Policy Objects (GPOs) to centrally manage and control the configuration of the signs across your network. GPOs provide a scalable and efficient way to enforce consistent settings and policies on multiple signs, ensuring a unified and secure signage system.
+
+By following these security practices, you can maintain the integrity of your digital signage system and prevent unauthorized access or tampering, ultimately ensuring a reliable and secure display of content.</value>
+  </data>
 </root>
