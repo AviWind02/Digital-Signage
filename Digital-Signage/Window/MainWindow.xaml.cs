@@ -204,7 +204,7 @@ namespace Digital_Signage
             }
             slideCount++;
 
-            if (slideCount % 6 == 0)
+            if (slideCount % 6 == 0 && !isSlidePlaying)
             {
                 // Show image level
                 int levelIndex = 1;
@@ -218,7 +218,32 @@ namespace Digital_Signage
             }
             else
             {
-                if (ShouldPlayVideo())
+                
+                if (ShouldPlaySlide() || isSlidePlaying)
+                {
+                    isSlidePlaying = true;
+
+                    // If we still have PowerPoint slides to show, show the next one
+                    if (currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
+                    {
+                        //-1 is when the pptx runs out
+                        if (currentIndexOfSlide == -1)
+                        {
+                            isSlidePlaying = false;
+                            return;
+                        }
+                        imageControl.Visibility = Visibility.Visible;
+                        mediaElement.Visibility = Visibility.Collapsed;
+                        imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndexOfSlide]));
+                        Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndexOfSlide]}");
+                        currentIndexOfSlide = GetNextPowerPointSlideIndex();
+                        StartImageSlideDelay(); // Start the delay for image slides
+                        return;
+                    }
+                    currentIndexOfSlide = 0;
+                    isSlidePlaying = false;
+                }
+                else if (ShouldPlayVideo())
                 {
                     // Show video
                     currentIndex = GetRandomIndex(mediaCollection.Videos, previousVideoIndex);
@@ -249,29 +274,7 @@ namespace Digital_Signage
 
 
 
-            //ShouldPlaySlide();
-            //if (isSlidePlaying)
-            //{
-            //    // If we still have PowerPoint slides to show, show the next one
-            //    if (currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
-            //    {
-            //        //-1 is when the pptx runs out
-            //        if (currentIndexOfSlide == -1)
-            //        {
-            //            isSlidePlaying = false;
-            //            return;
-            //        }
-            //        imageControl.Visibility = Visibility.Visible;
-            //        mediaElement.Visibility = Visibility.Collapsed;
-            //        imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndexOfSlide]));
-            //        Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndexOfSlide]}");
-            //        currentIndexOfSlide = GetNextPowerPointSlideIndex();
-            //        StartImageSlideDelay(); // Start the delay for image slides
-            //        return;
-            //    }
-            //    currentIndexOfSlide = 0;
-            //    isSlidePlaying = false;
-            //}
+          
 
 
             //else
@@ -401,13 +404,7 @@ namespace Digital_Signage
             // Determine if the current slide should be a video or image based on some condition
             // In this example, we will randomly decide to play a slide 10% of the time
             Random random = new Random();
-            if (random.Next(100) < powerpointChance)
-            {
-                isSlidePlaying = true;
-                return true;
-            }
-            return false;
-
+            return random.Next(100) < powerpointChance;
         }
         private void StartImageSlideDelay()
         {
