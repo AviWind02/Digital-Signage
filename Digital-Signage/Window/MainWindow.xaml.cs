@@ -30,10 +30,8 @@ namespace Digital_Signage
         private bool isSlidePlaying = false;
         private bool loadingpptx = false;
         private DispatcherTimer timer; // Timer for slideshow
-        private int powerpointChance = 25;
-        private int videoChance = 50;
-        private int imageChance = 50;
-        private int levelImageChance = 5;
+        private int powerpointChance = 33;
+        private int videoChance = 33;
 
         private bool isVideo = false; // Flag to indicate if the current media is a video
 
@@ -77,10 +75,10 @@ namespace Digital_Signage
                     // Key doesn't exist, create the key and add values
                     Registry.CurrentUser.CreateSubKey(subKey);
 
-                    Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, string.Empty);
+                    //Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, string.Empty);
                     Registry.SetValue($"{baseKey}\\{subKey}", powerPointValue, string.Empty);
                     Registry.SetValue($"{baseKey}\\{subKey}", videosValue, string.Empty);
-                    Registry.SetValue($"{baseKey}\\{subKey}", imagesValue, string.Empty);
+                   // Registry.SetValue($"{baseKey}\\{subKey}", imagesValue, string.Empty);
 
 
                     Console.WriteLine("Registry key and values created successfully!");
@@ -88,17 +86,17 @@ namespace Digital_Signage
                 else
                 {
                     // Key exists, retrieve values and populate textboxes
-                    string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
+                  //  string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
                     string powerPoint = digiSignKey.GetValue(powerPointValue, string.Empty) as string;
                     string videos = digiSignKey.GetValue(videosValue, string.Empty) as string;
-                    string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
+                   // string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
 
 
                     // Assuming you have four textboxes: textBox1, textBox2, textBox3, textBox4
-                    levelImageChance = int.Parse(levelImages);
+                    //levelImageChance = int.Parse(levelImages);
                     powerpointChance = int.Parse(powerPoint);
                     videoChance = int.Parse(videos);
-                    imageChance = int.Parse(images);
+                    //imageChance = int.Parse(images);
 
                     Console.WriteLine("Registry values retrieved and populated successfully!");
                 }
@@ -114,9 +112,10 @@ namespace Digital_Signage
         {
 
 
-            //Retreive configuration from registry
+            //Retreive configuration from registry - Turned off during Debug to use values in editor
+#if !DEBUG
             CheckAndRetrieveRegistryValues();
-
+#endif
             // Specify the base folder path
             string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
 
@@ -135,37 +134,16 @@ namespace Digital_Signage
             GetMediaFromFolder(videosFolderPath, mediaCollection.Videos);
 
 
-
-
-            /*
-
-             */
-
-
+            string horizontalRule = new string('-', 50);
 
 
             // Display loaded media paths in the console
-            Console.WriteLine("Loaded Media:");
-            Console.WriteLine("Loaded Images:");
-            foreach (string imagePath in mediaCollection.Images)
-            {
-                Console.WriteLine(imagePath);
-            }
-            Console.WriteLine("Loaded Image Levels:");
-            foreach (string levelImagePath in mediaCollection.ImageLevels)
-            {
-                Console.WriteLine(levelImagePath);
-            }
-            Console.WriteLine("Loaded PowerPoint Images:");
-            foreach (string pptImagePath in mediaCollection.PowerpointImages)
-            {
-                Console.WriteLine(pptImagePath);
-            }
-            Console.WriteLine("Loaded Videos:");
-            foreach (string videoPath in mediaCollection.Videos)
-            {
-                Console.WriteLine(videoPath);
-            }
+            Console.WriteLine($"{horizontalRule}\nLoaded Media:\n{horizontalRule}");
+
+            LogSection("Images", mediaCollection.Images);
+            LogSection("Image Levels", mediaCollection.ImageLevels);
+            LogSection("PowerPoint Images", mediaCollection.PowerpointImages);
+            LogSection("Videos", mediaCollection.Videos);
             Console.WriteLine("Files Loaded. Starting Playback.");
 
             if (mediaCollection.Images.Count > 0)
@@ -176,7 +154,14 @@ namespace Digital_Signage
             }
         }
 
-
+        public static void LogSection(string sectionName, List<string> items)
+        {
+            Console.WriteLine($"\n{sectionName}:\n{new string('-', sectionName.Length)}");
+            foreach (var item in items)
+            {
+                Console.WriteLine($"  - {item}");
+            }
+        }
 
         // Method to get media from a folder and its subfolders
         private void GetMediaFromFolder(string folderPath, List<string> mediaList)
@@ -196,122 +181,103 @@ namespace Digital_Signage
 
         private void timerTick(object sender, EventArgs e)
         {
+            // Caution: Explicitly invoking garbage collection is generally not recommended.
             GC.Collect();
-            //If playing video let is play till donw. this will be false once media ends 
-            if (isVideoPlaying)
-            {
-                return;
-            }
-            slideCount++;
 
-            if (slideCount % 6 == 0 && !isSlidePlaying)
+            // If video is playing, let it finish
+            //if (isVideoPlaying) 
+            //    return;
+
+            slideCount++;
+           
+            if (ShouldPlaySlide() || isSlidePlaying)
             {
-                // Show image level
-                int levelIndex = 1;
-                if (levelIndex >= 0 && levelIndex < mediaCollection.ImageLevels.Count)
-                {
-                    imageControl.Source = new BitmapImage(new Uri(mediaCollection.ImageLevels[levelIndex]));
-                    Console.WriteLine($"Showing LEVEL Image: {mediaCollection.ImageLevels[levelIndex]}");
-                    // Log level image path
-                    StartImageSlideDelay(); // Start the delay for image slides
-                }
+                ShowPowerPointSlide();
             }
             else
             {
-                
-                if (ShouldPlaySlide() || isSlidePlaying)
-                {
-                    isSlidePlaying = true;
 
-                    // If we still have PowerPoint slides to show, show the next one
-                    if (currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
-                    {
-                        //-1 is when the pptx runs out
-                        if (currentIndexOfSlide == -1)
-                        {
-                            isSlidePlaying = false;
-                            return;
-                        }
-                        imageControl.Visibility = Visibility.Visible;
-                        mediaElement.Visibility = Visibility.Collapsed;
-                        imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndexOfSlide]));
-                        Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndexOfSlide]}");
-                        currentIndexOfSlide = GetNextPowerPointSlideIndex();
-                        StartImageSlideDelay(); // Start the delay for image slides
-                        return;
-                    }
-                    currentIndexOfSlide = 0;
-                    isSlidePlaying = false;
-                }
-                else if (ShouldPlayVideo())
+                if (ShouldPlayVideo())
                 {
-                    // Show video
-                    currentIndex = GetRandomIndex(mediaCollection.Videos, previousVideoIndex);
-                    previousVideoIndex = currentIndex;
-                    imageControl.Visibility = Visibility.Collapsed;
-                    mediaElement.Visibility = Visibility.Visible;
-                    mediaElement.Source = new Uri(mediaCollection.Videos[currentIndex]);
-                    mediaElement.Play();
-                    Console.WriteLine($"Showing Video: {mediaCollection.Videos[currentIndex]}");
-                    isVideoPlaying = true;
+                    ShowVideo();
+                    return;
                 }
-                else
+                else 
                 {
-                    //No more PowerPoint slides, show regular image
-                    currentIndex = GetRandomIndex(mediaCollection.Images);
-                    imageControl.Visibility = Visibility.Visible;
-                    mediaElement.Visibility = Visibility.Collapsed;
-                    Console.WriteLine($"Showing Image: {mediaCollection.Images[currentIndex]}");
-                    imageControl.Source = new BitmapImage(new Uri(mediaCollection.Images[currentIndex]));
-                    StartImageSlideDelay(); // Start the delay for image slides
+                    ShowRegularImage();
+                    return;
                 }
-
-            
             }
+        }
 
+        private bool ShouldShowLevelImage()
+        {
+            return slideCount % 6 == 0 && !isSlidePlaying;
+        }
 
+        private void ShowLevelImage()
+        {
+            int levelIndex = 1;  // Hardcoded for now
+            SetImageSource(mediaCollection.ImageLevels[levelIndex]);
+            Console.WriteLine($"Showing LEVEL Image: {mediaCollection.ImageLevels[levelIndex]}");
+            StartTimer(imageSlideDelay);
+        }
 
+        private void ShowPowerPointSlide()
+        {
+            isSlidePlaying = true;
+            if (currentIndexOfSlide < mediaCollection.PowerpointImages.Count && currentIndexOfSlide != -1)
+            {
+                SetImageSource(mediaCollection.PowerpointImages[currentIndexOfSlide]);
+                Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndexOfSlide]}");
+                currentIndexOfSlide = GetNextPowerPointSlideIndex();
+                StartTimer(imageSlideDelay);
+                return;
+            }
+            currentIndexOfSlide = 0;
+            isSlidePlaying = false;
+        }
 
+        private void ShowVideo()
+        {
+            int index = GetRandomIndex(mediaCollection.Videos, previousVideoIndex);
+            previousVideoIndex = index;
+            SetVideoSource(mediaCollection.Videos[index]);
+            Console.WriteLine($"Showing Video: {mediaCollection.Videos[index]}");
+            isVideoPlaying = true;
+        }
 
+        private void ShowRegularImage()
+        {
+            int index = GetRandomIndex(mediaCollection.Images);
+            SetImageSource(mediaCollection.Images[index]);
+            Console.WriteLine($"Showing Image: {mediaCollection.Images[index]}");
+            StartTimer(imageSlideDelay);
+        }
 
-          
+        private void SetImageSource(string imagePath)
+        {
+            ToggleVisibility(true);
+            imageControl.Source = new BitmapImage(new Uri(imagePath));
+        }
 
+        private void SetVideoSource(string videoPath)
+        {
+            ToggleVisibility(false);
+            mediaElement.Source = new Uri(videoPath);
+            mediaElement.Play();
+        }
 
-            //else
-            //{
-            //    if (ShouldPlayVideo())
-            //    {
-            //        // Show video
-            //        currentIndex = GetRandomIndex(mediaCollection.Videos, previousVideoIndex);
-            //        previousVideoIndex = currentIndex;
-            //        imageControl.Visibility = Visibility.Collapsed;
-            //        mediaElement.Visibility = Visibility.Visible;
-            //        mediaElement.Source = new Uri(mediaCollection.Videos[currentIndex]);
-            //        mediaElement.Play();
-            //        Console.WriteLine($"Showing Video: {mediaCollection.Videos[currentIndex]}");
-            //        isVideoPlaying = true;
-            //    }
-            //    else if (ShouldShowImage())
-            //    {
+        private void ToggleVisibility(bool showImageControl)
+        {
+            imageControl.Visibility = showImageControl ? Visibility.Visible : Visibility.Collapsed;
+            mediaElement.Visibility = !showImageControl ? Visibility.Visible : Visibility.Collapsed;
+        }
 
-            //       
-
-
-            //        //if (currentIndex >= 0 && currentIndex < mediaCollection.PowerpointImages.Count)
-            //        //{
-            //        //    imageControl.Visibility = Visibility.Visible;
-            //        //    mediaElement.Visibility = Visibility.Collapsed;
-            //        //    Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndex]}");
-            //        //    imageControl.Source = new BitmapImage(new Uri(mediaCollection.PowerpointImages[currentIndex]));
-            //        //    currentIndexOfSlide = currentIndex + 1; // Move to the next slide index
-            //        //    StartImageSlideDelay(); // Start the delay for image slides
-            //        //}
-            //        //else
-            //        //{
-
-            //        //}
-            //    }
-            //}
+        private void StartTimer(int delay)
+        {
+            timer.Interval = TimeSpan.FromMilliseconds(delay);
+            timer.Start();
         }
 
 
@@ -385,24 +351,14 @@ namespace Digital_Signage
         }
 
 
-        private bool ShouldShowImage()
-        {
-            // Determine if the current slide should be a video or image based on some condition
-            // In this example, we will randomly decide to play a video 10% of the time
-            Random random = new Random();
-            return random.Next(100) < imageChance;
-        }
+   
         private bool ShouldPlayVideo()
         {
-            // Determine if the current slide should be a video or image based on some condition
-            // In this example, we will randomly decide to play a video 10% of the time
             Random random = new Random();
             return random.Next(100) < videoChance;
         }
         private bool ShouldPlaySlide()
         {
-            // Determine if the current slide should be a video or image based on some condition
-            // In this example, we will randomly decide to play a slide 10% of the time
             Random random = new Random();
             return random.Next(100) < powerpointChance;
         }

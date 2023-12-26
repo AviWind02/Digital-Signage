@@ -1,11 +1,4 @@
-﻿
-/*
- * The `PowerPointExtractor` class extracts slides from PowerPoint presentations and saves 
- * them as images. It uses the PowerPoint application to open each presentation, creates a 
- * folder for the presentation, and saves each slide as a separate image in that folder. Finally, 
- * it closes the PowerPoint application.
- */
-using System;
+﻿using System;
 using System.IO;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.PowerPoint;
@@ -14,7 +7,6 @@ namespace Digital_Signage.Classes
 {
     internal class PowerPointExtractor
     {
-
         public void ExtractPowerPointSlides(string inputFolderPath, string outputFolderPath)
         {
             // Create an instance of PowerPoint application
@@ -23,9 +15,12 @@ namespace Digital_Signage.Classes
             // Get all PowerPoint files in the input folder
             string[] powerPointFiles = Directory.GetFiles(inputFolderPath, "*.pptx");
 
+            // Log start of PowerPoint processing
+            LogSection("PowerPoint Extraction", $"Processing {powerPointFiles.Length} files from: {inputFolderPath}");
+
             foreach (string filePath in powerPointFiles)
             {
-                Console.WriteLine($"Processing file: {filePath}");
+                LogSection("Processing File", filePath);
 
                 try
                 {
@@ -38,6 +33,9 @@ namespace Digital_Signage.Classes
                     // Create a folder with the PowerPoint file name
                     string presentationFolder = Path.Combine(outputFolderPath, fileName);
                     Directory.CreateDirectory(presentationFolder);
+
+                    // Log created folder
+                    Console.WriteLine($"Created folder for presentation: {presentationFolder}");
 
                     // Save each slide as an image in the presentation folder
                     for (int i = 1; i <= presentation.Slides.Count; i++)
@@ -54,26 +52,29 @@ namespace Digital_Signage.Classes
 
                         // Save the slide as an image
                         slide.Export(slideImagePath, "PNG", ScaleWidth: 1024, ScaleHeight: 768);
-
-                        Console.WriteLine($"Slide {i} extracted and saved as: {slideImagePath}");
+                        Console.WriteLine($"  - Slide {i} extracted and saved as: {slideImagePath}");
                     }
 
                     // Close the presentation
                     presentation.Close();
-
                     Console.WriteLine($"Extraction completed for file: {filePath}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error processing file: {filePath}");
-                    Console.WriteLine($"Error message: {ex.Message}");
+                    LogSection("Error", $"Error processing file: {filePath}\nError message: {ex.Message}");
                 }
             }
 
             // Quit the PowerPoint application
             app.Quit();
-            Console.WriteLine("PowerPoint application closed.");
+            LogSection("Completion", "PowerPoint application closed.");
+        }
+
+        public static void LogSection(string sectionTitle, string content)
+        {
+            string separator = new string('-', sectionTitle.Length + 2);
+            Console.WriteLine($"\n{sectionTitle}\n{separator}");
+            Console.WriteLine(content);
         }
     }
-
 }
