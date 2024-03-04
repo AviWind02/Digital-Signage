@@ -35,6 +35,8 @@ namespace Digital_Signage
 
         private bool isVideo = false; // Flag to indicate if the current media is a video
 
+        private string[][] powerPointFiles;
+
 
         enum Mediatypes
         {
@@ -133,17 +135,33 @@ namespace Digital_Signage
             powerPointExtractor.ExtractPowerPointSlides(powerpointFolderPath, powerpointImagesFolderPath);
             GetMediaFromFolder(videosFolderPath, mediaCollection.Videos);
 
+            PowerPointManager powerPointManager = new PowerPointManager(); // Create an instance of PowerPointManager
+            powerPointFiles = powerPointManager.StorePowerPointFiles(powerpointImagesFolderPath); // Call the StorePowerPointFiles function
+
+
 
             string horizontalRule = new string('-', 50);
 
+            // Display loaded PPT for checks 
+            Console.WriteLine($"{horizontalRule}\nLoaded PPT in Array:\n{horizontalRule}");
+            foreach (var folder in powerPointFiles)
+            {
+                Console.WriteLine("Folder: " + folder[0]); // The first element is the folder name
+                for (int i = 1; i < folder.Length; i++)
+                {
+                    Console.WriteLine("  File: " + folder[i]); // PowerPoint file names
+                }
+            }
 
             // Display loaded media paths in the console
             Console.WriteLine($"{horizontalRule}\nLoaded Media:\n{horizontalRule}");
 
             LogSection("Images", mediaCollection.Images);
             LogSection("Image Levels", mediaCollection.ImageLevels);
-            LogSection("PowerPoint Images", mediaCollection.PowerpointImages);
             LogSection("Videos", mediaCollection.Videos);
+
+       
+
             Console.WriteLine("Files Loaded. Starting Playback.");
 
             if (mediaCollection.Images.Count > 0)
@@ -163,7 +181,11 @@ namespace Digital_Signage
             }
         }
 
-        // Method to get media from a folder and its subfolders
+        /// <summary>
+        /// Retrieves the file paths of all media files within a specified folder and its subfolders.
+        /// </summary>
+        /// <param name="folderPath">The path of the folder from which to retrieve media files.</param>
+        /// <param name="mediaList">A list to which the retrieved file paths will be added.</param>
         private void GetMediaFromFolder(string folderPath, List<string> mediaList)
         {
             if (Directory.Exists(folderPath))
@@ -178,6 +200,19 @@ namespace Digital_Signage
             }
         }
 
+        private void GetPPTFromFolder(string folderPath, List<string> mediaList)
+        {
+            if (Directory.Exists(folderPath))
+            {
+                // Get all files from the folder and its subfolders
+                string[] files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
+
+                foreach (string file in files)
+                {
+                    mediaList.Add(file);
+                }
+            }
+        }
 
         private void timerTick(object sender, EventArgs e)
         {
@@ -209,34 +244,62 @@ namespace Digital_Signage
                 }
             }
         }
-
-        private bool ShouldShowLevelImage()
-        {
-            return slideCount % 6 == 0 && !isSlidePlaying;
-        }
-
-        private void ShowLevelImage()
-        {
-            int levelIndex = 1;  // Hardcoded for now
-            SetImageSource(mediaCollection.ImageLevels[levelIndex]);
-            Console.WriteLine($"Showing LEVEL Image: {mediaCollection.ImageLevels[levelIndex]}");
-            StartTimer(imageSlideDelay);
-        }
+        private int currentFolderIndex = 0; // Index of the currently displayed folder in the 2D array
+        private int currentSlideIndex = 1; // Index of the currently displayed slide in the current folder (starts at 1 to skip folder name)
 
         private void ShowPowerPointSlide()
         {
             isSlidePlaying = true;
-            if (currentIndexOfSlide < mediaCollection.PowerpointImages.Count && currentIndexOfSlide != -1)
+            string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+            string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
+
+            Console.WriteLine($"Current Folder Index: {currentFolderIndex}, Current Slide Index: {currentSlideIndex}");
+
+            // Check if the folder and slide indices are within the bounds of the array
+            if (currentFolderIndex < powerPointFiles.Length && currentSlideIndex < powerPointFiles[currentFolderIndex].Length)
             {
-                SetImageSource(mediaCollection.PowerpointImages[currentIndexOfSlide]);
-                Console.WriteLine($"Showing PowerPoint Slide: {mediaCollection.PowerpointImages[currentIndexOfSlide]}");
-                currentIndexOfSlide = GetNextPowerPointSlideIndex();
+                string folderName = powerPointFiles[currentFolderIndex][0];
+                string slideFileName = powerPointFiles[currentFolderIndex][currentSlideIndex];
+
+                // Construct the full path of the current slide
+                string slideFilePath = Path.Combine(powerpointImagesFolderPath, folderName, slideFileName);
+                SetImageSource(slideFilePath);
+                Console.WriteLine($"Showing PowerPoint Slide: {slideFilePath}");
+
+                // Move to the next slide
+                currentSlideIndex++;
+
+                Console.WriteLine($"Moving to Next Slide: Folder Index: {currentFolderIndex}, Slide Index: {currentSlideIndex}");
+
+                // Check if we need to move to the next folder
+                if (currentSlideIndex >= powerPointFiles[currentFolderIndex].Length)
+                {
+                    // Reset slide index and move to next folder
+                    currentSlideIndex = 1; // Start at 1 to skip the folder name
+                    currentFolderIndex++;
+
+                    Console.WriteLine($"Moving to Next Folder: Folder Index: {currentFolderIndex}");
+
+                    // If we've gone through all folders, reset to the first folder
+                    if (currentFolderIndex >= powerPointFiles.Length)
+                    {
+                        currentFolderIndex = 0;
+                        Console.WriteLine("Resetting to First Folder");
+                    }
+                }
+
                 StartTimer(imageSlideDelay);
-                return;
             }
-            currentIndexOfSlide = 0;
-            isSlidePlaying = false;
+            else
+            {
+                // Reset indices and stop the slide show if out of bounds
+                currentFolderIndex = 0;
+                currentSlideIndex = 1;
+                isSlidePlaying = false;
+                Console.WriteLine("No more slides available. Stopping slide show.");
+            }
         }
+
 
         private void ShowVideo()
         {
@@ -281,65 +344,55 @@ namespace Digital_Signage
         }
 
 
-        private int GetNextPowerPointSlideIndex()
-        {
-            if (currentIndexOfSlide >= 0 && currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
-            {
-                string currentSlidePath = mediaCollection.PowerpointImages[currentIndexOfSlide];
-                string currentSlideFolder = Path.GetDirectoryName(currentSlidePath);
-                int currentSlideNumber = GetSlideNumberFromPath(currentSlidePath);
+        //private int GetNextPowerPointSlideIndex()
+        //{
+        //    if (currentIndexOfSlide >= 0 && currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
+        //    {
+        //        string currentSlidePath = mediaCollection.PowerpointImages[currentIndexOfSlide];
+        //        string currentSlideFolder = Path.GetDirectoryName(currentSlidePath);
+        //        int currentSlideNumber = GetSlideNumberFromPath(currentSlidePath);
 
-                for (int i = currentIndexOfSlide + 1; i < mediaCollection.PowerpointImages.Count; i++)
-                {
-                    string slidePath = mediaCollection.PowerpointImages[i];
-                    string slideFolder = Path.GetDirectoryName(slidePath);
-                    int slideNumber = GetSlideNumberFromPath(slidePath);
+        //        for (int i = currentIndexOfSlide + 1; i < mediaCollection.PowerpointImages.Count; i++)
+        //        {
+        //            string slidePath = mediaCollection.PowerpointImages[i];
+        //            string slideFolder = Path.GetDirectoryName(slidePath);
+        //            int slideNumber = GetSlideNumberFromPath(slidePath);
 
-                    if (slideFolder == currentSlideFolder && slideNumber == currentSlideNumber + 1)
-                    {
-                        // Next slide found
-                        return i;
-                    }
-                }
-            }
+        //            if (slideFolder == currentSlideFolder && slideNumber == currentSlideNumber + 1)
+        //            {
+        //                // Next slide found
+        //                return i;
+        //            }
+        //        }
+        //    }
 
-            // If current slide index is out of range or next slide not found in the same folder,
-            // search from the beginning for the next slide in the same folder
-            if (mediaCollection.PowerpointImages.Count > 0)
-            {
-                string currentSlidePath = mediaCollection.PowerpointImages[currentIndexOfSlide];
-                string currentSlideFolder = Path.GetDirectoryName(currentSlidePath);
-                int currentSlideNumber = GetSlideNumberFromPath(currentSlidePath);
+        //    // If current slide index is out of range or next slide not found in the same folder,
+        //    // search from the beginning for the next slide in the same folder
+        //    if (mediaCollection.PowerpointImages.Count > 0)
+        //    {
+        //        string currentSlidePath = mediaCollection.PowerpointImages[currentIndexOfSlide];
+        //        string currentSlideFolder = Path.GetDirectoryName(currentSlidePath);
+        //        int currentSlideNumber = GetSlideNumberFromPath(currentSlidePath);
 
-                for (int i = 0; i < mediaCollection.PowerpointImages.Count; i++)
-                {
-                    string slidePath = mediaCollection.PowerpointImages[i];
-                    string slideFolder = Path.GetDirectoryName(slidePath);
-                    int slideNumber = GetSlideNumberFromPath(slidePath);
+        //        for (int i = 0; i < mediaCollection.PowerpointImages.Count; i++)
+        //        {
+        //            string slidePath = mediaCollection.PowerpointImages[i];
+        //            string slideFolder = Path.GetDirectoryName(slidePath);
+        //            int slideNumber = GetSlideNumberFromPath(slidePath);
 
-                    if (slideFolder == currentSlideFolder && slideNumber == currentSlideNumber + 1)
-                    {
-                        // Next slide found
-                        return i;
-                    }
-                }
-            }
+        //            if (slideFolder == currentSlideFolder && slideNumber == currentSlideNumber + 1)
+        //            {
+        //                // Next slide found
+        //                return i;
+        //            }
+        //        }
+        //    }
 
-            // Next slide not found or no slides available
-            return -1;
-        }
+        //    // Next slide not found or no slides available
+        //    return -1;
+        //}
 
 
-
-        private bool ShouldShowNextPowerPointSlide(string slidePath)
-        {
-            // Implement your logic to determine if the next PowerPoint slide should be shown
-            // based on the provided slidePath. Return true if it should be shown, false otherwise.
-            // You can use any condition or criteria specific to your requirements.
-
-            // Example condition: Check if the slide name contains "slide"
-            return slidePath.Contains("slide");
-        }
 
         private int GetSlideNumberFromPath(string slidePath)
         {
@@ -362,11 +415,7 @@ namespace Digital_Signage
             Random random = new Random();
             return random.Next(100) < powerpointChance;
         }
-        private void StartImageSlideDelay()
-        {
-            timer.Interval = TimeSpan.FromMilliseconds(imageSlideDelay);
-            timer.Start();
-        }
+
 
         private int GetRandomIndex(List<string> mediaList, int excludeIndex)
         {
@@ -400,6 +449,11 @@ namespace Digital_Signage
 
         }
 
-    
+
+
+
+
+
+
     }
 }

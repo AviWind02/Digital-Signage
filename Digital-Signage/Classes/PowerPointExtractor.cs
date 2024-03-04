@@ -7,6 +7,11 @@ namespace Digital_Signage.Classes
 {
     internal class PowerPointExtractor
     {
+        /// <summary>
+        /// Converts PowerPoint (.pptx) files in a specified folder into image files.
+        /// </summary>
+        /// <param name="sourceFolderPath">The folder containing PowerPoint files to be converted.</param>
+        /// <param name="destinationFolderPath">The folder where the resulting image files will be saved.</param>
         public void ExtractPowerPointSlides(string inputFolderPath, string outputFolderPath)
         {
             // Create an instance of PowerPoint application

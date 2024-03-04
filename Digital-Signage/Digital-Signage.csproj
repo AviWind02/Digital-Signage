@@ -71,6 +71,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ImageProcessor.cs" />
     <Compile Include="Classes\MediaCollection.cs" />
+    <Compile Include="Classes\PowerPointManager.cs" />
     <Page Include="Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
