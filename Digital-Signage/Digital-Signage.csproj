@@ -71,7 +71,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ImageProcessor.cs" />
     <Compile Include="Classes\MediaCollection.cs" />
-    <Compile Include="Classes\PowerPointManager.cs" />
+    <Compile Include="Classes\PowerPoint\PowerPointManager.cs" />
     <Page Include="Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,7 +81,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\NumericStringComparer .cs" />
-    <Compile Include="Classes\PowerPointExtractor.cs" />
+    <Compile Include="Classes\PowerPoint\PowerPointExtractor.cs" />
     <Compile Include="Window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

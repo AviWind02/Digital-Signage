@@ -115,63 +115,64 @@ namespace Digital_Signage
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
-
-            //Retreive configuration from registry - Turned off during Debug to use values in editor
+            //Retrieve configuration from registry for non-debug mode
 #if !DEBUG
-            CheckAndRetrieveRegistryValues();
+    CheckAndRetrieveRegistryValues();
 #endif
-            // Specify the base folder path
-            string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
 
-            // Define folder paths for each media type
-            string imagesFolderPath = Path.Combine(baseFolderPath, "Images");
-            string levelImagesFolderPath = Path.Combine(baseFolderPath, "Level Images");
-            string powerpointFolderPath = Path.Combine(baseFolderPath, "PowerPoint");
-            string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
-            string videosFolderPath = Path.Combine(baseFolderPath, "Videos");
-
-            // Get media from each folder
-            GetMediaFromFolder(imagesFolderPath, mediaCollection.Images);
-            GetMediaFromFolder(levelImagesFolderPath, mediaCollection.ImageLevels);
-            GetMediaFromFolder(powerpointImagesFolderPath, mediaCollection.PowerpointImages);
-            powerPointExtractor.ExtractPowerPointSlides(powerpointFolderPath, powerpointImagesFolderPath);
-            GetMediaFromFolder(videosFolderPath, mediaCollection.Videos);
-
-            PowerPointManager powerPointManager = new PowerPointManager(); // Create an instance of PowerPointManager
-            powerPointFiles = powerPointManager.StorePowerPointFiles(powerpointImagesFolderPath); // Call the StorePowerPointFiles function
-
-
-
-            string horizontalRule = new string('-', 50);
-
-            // Display loaded PPT for checks 
-            Console.WriteLine($"{horizontalRule}\nLoaded PPT in Array:\n{horizontalRule}");
-            foreach (var folder in powerPointFiles)
+            try
             {
-                Console.WriteLine("Folder: " + folder[0]); // The first element is the folder name
-                for (int i = 1; i < folder.Length; i++)
+                //Define base folder path for media storage
+                string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+
+                //Define folder paths for each media type
+                string imagesFolderPath = Path.Combine(baseFolderPath, "Images");
+                string levelImagesFolderPath = Path.Combine(baseFolderPath, "Level Images");
+                string powerpointFolderPath = Path.Combine(baseFolderPath, "PowerPoint");
+                string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
+                string videosFolderPath = Path.Combine(baseFolderPath, "Videos");
+
+                //Retrieve media from respective folders
+                GetMediaFromFolder(imagesFolderPath, mediaCollection.Images);
+                GetMediaFromFolder(levelImagesFolderPath, mediaCollection.ImageLevels);
+                GetMediaFromFolder(powerpointImagesFolderPath, mediaCollection.PowerpointImages);
+                powerPointExtractor.ExtractPowerPointSlides(powerpointFolderPath, powerpointImagesFolderPath);
+                GetMediaFromFolder(videosFolderPath, mediaCollection.Videos);
+
+                //Create and store PowerPoint files in 2D array
+                PowerPointManager powerPointManager = new PowerPointManager();
+                powerPointFiles = powerPointManager.StorePowerPointFiles(powerpointImagesFolderPath);
+
+                //Log loaded PPT files for verification
+                string horizontalRule = new string('-', 50);
+                Console.WriteLine($"{horizontalRule}\nLoaded PPT in Array:\n{horizontalRule}");
+                foreach (var folder in powerPointFiles)
                 {
-                    Console.WriteLine("  File: " + folder[i]); // PowerPoint file names
+                    Console.WriteLine("Folder: " + folder[0]);
+                    for (int i = 1; i < folder.Length; i++)
+                    {
+                        Console.WriteLine("  File: " + folder[i]);
+                    }
+                }
+
+                //Display loaded media paths in console
+                Console.WriteLine($"{horizontalRule}\nLoaded Media:\n{horizontalRule}");
+                LogSection("Images", mediaCollection.Images);
+                LogSection("Image Levels", mediaCollection.ImageLevels);
+                LogSection("Videos", mediaCollection.Videos);
+
+                Console.WriteLine("Files Loaded. Starting Playback.");
+
+                //Set first image as source and start timer
+                if (mediaCollection.Images.Count > 0)
+                {
+                    imageControl.Source = new BitmapImage(new Uri(mediaCollection.Images[currentIndex]));
+                    timer.Start();
                 }
             }
-
-            // Display loaded media paths in the console
-            Console.WriteLine($"{horizontalRule}\nLoaded Media:\n{horizontalRule}");
-
-            LogSection("Images", mediaCollection.Images);
-            LogSection("Image Levels", mediaCollection.ImageLevels);
-            LogSection("Videos", mediaCollection.Videos);
-
-       
-
-            Console.WriteLine("Files Loaded. Starting Playback.");
-
-            if (mediaCollection.Images.Count > 0)
+            catch (Exception ex)
             {
-                imageControl.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(mediaCollection.Images[currentIndex]));
-                //timer.Interval = TimeSpan.FromMilliseconds(imageSlideDelay);
-                timer.Start();
+                Console.WriteLine($"Error in MainWindow_Loaded: {ex.Message}");
             }
         }
 
@@ -184,11 +185,7 @@ namespace Digital_Signage
             }
         }
 
-        /// <summary>
-        /// Retrieves the file paths of all media files within a specified folder and its subfolders.
-        /// </summary>
-        /// <param name="folderPath">The path of the folder from which to retrieve media files.</param>
-        /// <param name="mediaList">A list to which the retrieved file paths will be added.</param>
+        //Retrieves the file paths of all media files within a specified folder and its subfolders.
         private void GetMediaFromFolder(string folderPath, List<string> mediaList)
         {
             if (Directory.Exists(folderPath))
@@ -203,98 +200,103 @@ namespace Digital_Signage
             }
         }
 
-        private void GetPPTFromFolder(string folderPath, List<string> mediaList)
-        {
-            if (Directory.Exists(folderPath))
-            {
-                // Get all files from the folder and its subfolders
-                string[] files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
-
-                foreach (string file in files)
-                {
-                    mediaList.Add(file);
-                }
-            }
-        }
-
         private void timerTick(object sender, EventArgs e)
         {
+
             //Caution: Explicitly invoking garbage collection is generally not recommended.
             //GC.Collect();
 
-            // If video is playing, let it finish
+            // Check if video is playing, if so, let it finish
             if (isVideoPlaying)
+            {
+                Console.WriteLine("Video is playing, waiting for it to finish...");
                 return;
-
-            slideCount++;
-           
-            if ((ShouldPlaySlide() || isSlidePlaying) && !canSwitchMediaTypeToPPT)
-            {
-                ShowPowerPointSlide();
             }
-            else
-            {
 
-                if (ShouldPlayVideo())
+            try
+            {
+                slideCount++;//Logging - Does nothing in the code; just keep counts
+                Console.WriteLine($"Slide count incremented to: {slideCount}");
+
+                // Determine whether to show a PowerPoint slide, video, or regular image
+                if ((ShouldPlaySlide() || isSlidePlaying) && !canSwitchMediaTypeToPPT)
                 {
-                    ShowVideo();
-                    return;
+                    ShowPowerPointSlide();
                 }
-                else 
+                else
                 {
-                    ShowRegularImage();
-                    CountDownDelay();
-                    ControlMediaPlayback();
-                    return;
+                    if (ShouldPlayVideo())
+                    {
+                        ShowVideo();
+                        ControlMediaPlayback();
+                    }
+                    else
+                    {
+                        ShowRegularImage();
+                        CountDownDelay();
+                        ControlMediaPlayback();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during timer tick: {ex.Message}");
             }
         }
+
         private int currentFolderIndex = 0; // Index of the currently displayed folder in the 2D array
         private int currentSlideIndex = 1; // Index of the currently displayed slide in the current folder (starts at 1 to skip folder name)
-
         private void ShowPowerPointSlide()
         {
+            //Set the slide show flag to true
             isSlidePlaying = true;
             string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
             string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
 
             Console.WriteLine($"Current Folder Index: {currentFolderIndex}, Current Slide Index: {currentSlideIndex}");
 
-            // Check if the slide index is within the bounds of the current folder
+            //Check if the slide index is within the bounds of the current folder
             if (currentSlideIndex < powerPointFiles[currentFolderIndex].Length)
             {
-                string folderName = powerPointFiles[currentFolderIndex][0];
-                string slideFileName = powerPointFiles[currentFolderIndex][currentSlideIndex];
+                try
+                {
+                    string folderName = powerPointFiles[currentFolderIndex][0];
+                    string slideFileName = powerPointFiles[currentFolderIndex][currentSlideIndex];
 
-                // Construct the full path of the current slide
-                string slideFilePath = Path.Combine(powerpointImagesFolderPath, folderName, slideFileName);
-                SetImageSource(slideFilePath);
-                Console.WriteLine($"Showing PowerPoint Slide: {slideFilePath}");
+                    //Construct the full path of the current slide
+                    string slideFilePath = Path.Combine(powerpointImagesFolderPath, folderName, slideFileName);
+                    SetImageSource(slideFilePath);
+                    Console.WriteLine($"Showing PowerPoint Slide: {slideFilePath}");
 
-                // Move to the next slide
-                currentSlideIndex++;
+                    //Move to the next slide
+                    currentSlideIndex++;
+                    Console.WriteLine($"Moving to Next Slide: Folder Index: {currentFolderIndex}, Slide Index: {currentSlideIndex}");
 
-                Console.WriteLine($"Moving to Next Slide: Folder Index: {currentFolderIndex}, Slide Index: {currentSlideIndex}");
-
-                CountDownDelay();
+                    CountDownDelay();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in showing PowerPoint slide: {ex.Message}");
+                }
             }
             else
             {
-                // End of folder reached, stop the slide show
+                //End of folder reached, stop the slide show
                 Console.WriteLine("End of folder reached. Stopping slide show.");
 
-                // Stop the slideshow
+                //Stop the slideshow
                 isSlidePlaying = false;
                 canSwitchMediaTypeToPPT = true;
-                // Move to the next folder
-                currentFolderIndex++;
-                currentSlideIndex = 1; // Reset to the first slide of the next folder
 
-                // Check if we've gone through all folders
+                //Move to the next folder
+                currentFolderIndex++;
+                currentSlideIndex = 1; //Reset to the first slide of the next folder
+
+                //Check if we've gone through all folders
                 if (currentFolderIndex >= powerPointFiles.Length)
                 {
                     Console.WriteLine("All folders completed. Resetting to the first folder.");
-                    currentFolderIndex = 0; // Reset to the first folder
+                    currentFolderIndex = 0; //Reset to the first folder
                 }
                 else
                 {
@@ -303,55 +305,97 @@ namespace Digital_Signage
             }
         }
 
+
         private void ShowVideo()
         {
-            int index = GetRandomIndex(mediaCollection.Videos, previousVideoIndex);
-            previousVideoIndex = index;
-            SetVideoSource(mediaCollection.Videos[index]);
-            Console.WriteLine($"Showing Video: {mediaCollection.Videos[index]}");
-            isVideoPlaying = true;
-        }
-
-        private void ShowRegularImage()
-        {
-            int index = GetRandomIndex(mediaCollection.Images);
-            SetImageSource(mediaCollection.Images[index]);
-            Console.WriteLine($"Showing Image: {mediaCollection.Images[index]}");
-        }
-
-        public void ControlMediaPlayback()
-        {
-            playbackCounter++;
-
-            Console.WriteLine($"Playback Counter: {playbackCounter}");
-
-            if (playbackCounter >= maxPlaybackCount)
+            try
             {
-                canSwitchMediaTypeToPPT = false;
-                playbackCounter = 0; // Reset the counter for the next cycle
-
-                Console.WriteLine("Reached maximum playback count. Ready to switch media type.");
+                int index = GetRandomIndex(mediaCollection.Videos, previousVideoIndex);
+                previousVideoIndex = index;
+                SetVideoSource(mediaCollection.Videos[index]);
+                Console.WriteLine($"Showing Video: {mediaCollection.Videos[index]}");
+                isVideoPlaying = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowVideo: {ex.Message}");
             }
         }
 
+
+        private void ShowRegularImage()
+        {
+            try
+            {
+                int index = GetRandomIndex(mediaCollection.Images);
+                SetImageSource(mediaCollection.Images[index]);
+                Console.WriteLine($"Showing Image: {mediaCollection.Images[index]}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowRegularImage: {ex.Message}");
+            }
+        }
+
+
+        public void ControlMediaPlayback()
+        {
+            try
+            {
+                playbackCounter++;
+                Console.WriteLine($"Playback Counter: {playbackCounter}");
+
+                if (playbackCounter >= maxPlaybackCount)
+                {
+                    canSwitchMediaTypeToPPT = false;
+                    playbackCounter = 0; // Reset the counter for the next cycle
+                    Console.WriteLine("Reached maximum playback count. Ready to switch media type.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ControlMediaPlayback: {ex.Message}");
+            }
+        }
+
+
         private void SetImageSource(string imagePath)
         {
-            ToggleVisibility(true);
-            imageControl.Source = new BitmapImage(new Uri(imagePath));
+            try
+            {
+                ToggleVisibility(true);
+                imageControl.Source = new BitmapImage(new Uri(imagePath));
+                //Console.WriteLine($"Image source set to: {imagePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error setting image source: {ex.Message}");
+            }
         }
+
 
         private void SetVideoSource(string videoPath)
         {
-            ToggleVisibility(false);
-            mediaElement.Source = new Uri(videoPath);
-            mediaElement.Play();
+            try
+            {
+                ToggleVisibility(false);
+                mediaElement.Source = new Uri(videoPath);
+                mediaElement.Play();
+                //Console.WriteLine($"Video source set to: {videoPath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error setting video source: {ex.Message}");
+            }
         }
 
         private void ToggleVisibility(bool showImageControl)
         {
+            // Toggle visibility between image and video controls
             imageControl.Visibility = showImageControl ? Visibility.Visible : Visibility.Collapsed;
             mediaElement.Visibility = !showImageControl ? Visibility.Visible : Visibility.Collapsed;
         }
+
 
         private void StartTimer(int delay)
         {
@@ -400,7 +444,6 @@ namespace Digital_Signage
         }
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
-            // Switch to the next slide
             isVideoPlaying = false;
             timerTick(null, null);
         }
