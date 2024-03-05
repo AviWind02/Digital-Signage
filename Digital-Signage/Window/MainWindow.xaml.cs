@@ -32,8 +32,11 @@ namespace Digital_Signage
         private DispatcherTimer timer; // Timer for slideshow
         private int powerpointChance = 33;
         private int videoChance = 33;
-
+        private bool canSwitchMediaTypeToPPT = false;
         private bool isVideo = false; // Flag to indicate if the current media is a video
+
+        private int playbackCounter = 0;
+        private int maxPlaybackCount = 10; // Set this to the count after which the media type should switch
 
         private string[][] powerPointFiles;
 
@@ -167,7 +170,7 @@ namespace Digital_Signage
             if (mediaCollection.Images.Count > 0)
             {
                 imageControl.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(mediaCollection.Images[currentIndex]));
-                timer.Interval = TimeSpan.FromMilliseconds(imageSlideDelay);
+                //timer.Interval = TimeSpan.FromMilliseconds(imageSlideDelay);
                 timer.Start();
             }
         }
@@ -216,16 +219,16 @@ namespace Digital_Signage
 
         private void timerTick(object sender, EventArgs e)
         {
-            // Caution: Explicitly invoking garbage collection is generally not recommended.
-            GC.Collect();
+            //Caution: Explicitly invoking garbage collection is generally not recommended.
+            //GC.Collect();
 
             // If video is playing, let it finish
-            //if (isVideoPlaying) 
-            //    return;
+            if (isVideoPlaying)
+                return;
 
             slideCount++;
            
-            if (ShouldPlaySlide() || isSlidePlaying)
+            if ((ShouldPlaySlide() || isSlidePlaying) && !canSwitchMediaTypeToPPT)
             {
                 ShowPowerPointSlide();
             }
@@ -240,6 +243,8 @@ namespace Digital_Signage
                 else 
                 {
                     ShowRegularImage();
+                    CountDownDelay();
+                    ControlMediaPlayback();
                     return;
                 }
             }
@@ -255,8 +260,8 @@ namespace Digital_Signage
 
             Console.WriteLine($"Current Folder Index: {currentFolderIndex}, Current Slide Index: {currentSlideIndex}");
 
-            // Check if the folder and slide indices are within the bounds of the array
-            if (currentFolderIndex < powerPointFiles.Length && currentSlideIndex < powerPointFiles[currentFolderIndex].Length)
+            // Check if the slide index is within the bounds of the current folder
+            if (currentSlideIndex < powerPointFiles[currentFolderIndex].Length)
             {
                 string folderName = powerPointFiles[currentFolderIndex][0];
                 string slideFileName = powerPointFiles[currentFolderIndex][currentSlideIndex];
@@ -271,35 +276,32 @@ namespace Digital_Signage
 
                 Console.WriteLine($"Moving to Next Slide: Folder Index: {currentFolderIndex}, Slide Index: {currentSlideIndex}");
 
-                // Check if we need to move to the next folder
-                if (currentSlideIndex >= powerPointFiles[currentFolderIndex].Length)
-                {
-                    // Reset slide index and move to next folder
-                    currentSlideIndex = 1; // Start at 1 to skip the folder name
-                    currentFolderIndex++;
-
-                    Console.WriteLine($"Moving to Next Folder: Folder Index: {currentFolderIndex}");
-
-                    // If we've gone through all folders, reset to the first folder
-                    if (currentFolderIndex >= powerPointFiles.Length)
-                    {
-                        currentFolderIndex = 0;
-                        Console.WriteLine("Resetting to First Folder");
-                    }
-                }
-
-                StartTimer(imageSlideDelay);
+                CountDownDelay();
             }
             else
             {
-                // Reset indices and stop the slide show if out of bounds
-                currentFolderIndex = 0;
-                currentSlideIndex = 1;
+                // End of folder reached, stop the slide show
+                Console.WriteLine("End of folder reached. Stopping slide show.");
+
+                // Stop the slideshow
                 isSlidePlaying = false;
-                Console.WriteLine("No more slides available. Stopping slide show.");
+                canSwitchMediaTypeToPPT = true;
+                // Move to the next folder
+                currentFolderIndex++;
+                currentSlideIndex = 1; // Reset to the first slide of the next folder
+
+                // Check if we've gone through all folders
+                if (currentFolderIndex >= powerPointFiles.Length)
+                {
+                    Console.WriteLine("All folders completed. Resetting to the first folder.");
+                    currentFolderIndex = 0; // Reset to the first folder
+                }
+                else
+                {
+                    Console.WriteLine($"Moving to Next Folder: Folder Index: {currentFolderIndex}");
+                }
             }
         }
-
 
         private void ShowVideo()
         {
@@ -315,7 +317,21 @@ namespace Digital_Signage
             int index = GetRandomIndex(mediaCollection.Images);
             SetImageSource(mediaCollection.Images[index]);
             Console.WriteLine($"Showing Image: {mediaCollection.Images[index]}");
-            StartTimer(imageSlideDelay);
+        }
+
+        public void ControlMediaPlayback()
+        {
+            playbackCounter++;
+
+            Console.WriteLine($"Playback Counter: {playbackCounter}");
+
+            if (playbackCounter >= maxPlaybackCount)
+            {
+                canSwitchMediaTypeToPPT = false;
+                playbackCounter = 0; // Reset the counter for the next cycle
+
+                Console.WriteLine("Reached maximum playback count. Ready to switch media type.");
+            }
         }
 
         private void SetImageSource(string imagePath)
@@ -343,67 +359,19 @@ namespace Digital_Signage
             timer.Start();
         }
 
-
-        //private int GetNextPowerPointSlideIndex()
-        //{
-        //    if (currentIndexOfSlide >= 0 && currentIndexOfSlide < mediaCollection.PowerpointImages.Count)
-        //    {
-        //        string currentSlidePath = mediaCollection.PowerpointImages[currentIndexOfSlide];
-        //        string currentSlideFolder = Path.GetDirectoryName(currentSlidePath);
-        //        int currentSlideNumber = GetSlideNumberFromPath(currentSlidePath);
-
-        //        for (int i = currentIndexOfSlide + 1; i < mediaCollection.PowerpointImages.Count; i++)
-        //        {
-        //            string slidePath = mediaCollection.PowerpointImages[i];
-        //            string slideFolder = Path.GetDirectoryName(slidePath);
-        //            int slideNumber = GetSlideNumberFromPath(slidePath);
-
-        //            if (slideFolder == currentSlideFolder && slideNumber == currentSlideNumber + 1)
-        //            {
-        //                // Next slide found
-        //                return i;
-        //            }
-        //        }
-        //    }
-
-        //    // If current slide index is out of range or next slide not found in the same folder,
-        //    // search from the beginning for the next slide in the same folder
-        //    if (mediaCollection.PowerpointImages.Count > 0)
-        //    {
-        //        string currentSlidePath = mediaCollection.PowerpointImages[currentIndexOfSlide];
-        //        string currentSlideFolder = Path.GetDirectoryName(currentSlidePath);
-        //        int currentSlideNumber = GetSlideNumberFromPath(currentSlidePath);
-
-        //        for (int i = 0; i < mediaCollection.PowerpointImages.Count; i++)
-        //        {
-        //            string slidePath = mediaCollection.PowerpointImages[i];
-        //            string slideFolder = Path.GetDirectoryName(slidePath);
-        //            int slideNumber = GetSlideNumberFromPath(slidePath);
-
-        //            if (slideFolder == currentSlideFolder && slideNumber == currentSlideNumber + 1)
-        //            {
-        //                // Next slide found
-        //                return i;
-        //            }
-        //        }
-        //    }
-
-        //    // Next slide not found or no slides available
-        //    return -1;
-        //}
-
-
-
-        private int GetSlideNumberFromPath(string slidePath)
+        private void CountDownDelay()
         {
-            string fileName = Path.GetFileNameWithoutExtension(slidePath);
-            string slideNumberStr = fileName.Substring(fileName.LastIndexOf("Slide") + 5);
-            int slideNumber = 0;
-            int.TryParse(slideNumberStr, out slideNumber);
-            return slideNumber;
+            int countdownTime = 5; // Countdown for 5 seconds
+            Console.WriteLine($"Starting countdown for {countdownTime} seconds...");
+
+            for (int i = countdownTime; i > 0; i--)
+            {
+                Console.WriteLine($"{i}...");
+                Thread.Sleep(1000); // Sleep for 1 second
+            }
+
+            Console.WriteLine("Continuing to next slide/image.");
         }
-
-
    
         private bool ShouldPlayVideo()
         {
@@ -412,8 +380,11 @@ namespace Digital_Signage
         }
         private bool ShouldPlaySlide()
         {
+
             Random random = new Random();
-            return random.Next(100) < powerpointChance;
+            if(!canSwitchMediaTypeToPPT)
+                return random.Next(100) < powerpointChance;
+            return false;
         }
 
 
