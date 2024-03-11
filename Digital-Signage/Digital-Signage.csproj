@@ -69,10 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\CreateFolders.cs" />
-    <Compile Include="Classes\ImageProcessor.cs" />
-    <Compile Include="Classes\MediaCollection.cs" />
-    <Compile Include="Classes\MediaFolderManager.cs" />
+    <Compile Include="Classes\Scripts\CreateFolders.cs" />
+    <Compile Include="Classes\Media\MediaCollection.cs" />
+    <Compile Include="Classes\Media\MediaFolderManager.cs" />
     <Compile Include="Classes\PowerPoint\PowerPointManager.cs" />
     <Page Include="Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -82,7 +81,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\NumericStringComparer .cs" />
+    <Compile Include="Classes\Math\NumericStringComparer .cs" />
     <Compile Include="Classes\PowerPoint\PowerPointExtractor.cs" />
     <Compile Include="Window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
