@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Microsoft.Office.Interop.PowerPoint;
-using System.Drawing;
 using Microsoft.Win32;
 using Digital_Signage.Classes;
-using System.Linq;
-using Aspose.Slides.MathText;
+using System.ComponentModel;
+
 
 namespace Digital_Signage
 {
@@ -21,22 +17,24 @@ namespace Digital_Signage
         private MediaCollection mediaCollection;
         private PowerPointExtractor powerPointExtractor;
         private NumericStringComparer numericStringComparer;
+        private DispatcherTimer timer; // Timer for slideshow
+
         private int currentIndex = 0; // Index of the currently displayed media
         private int currentIndexOfSlide = 0; // Index of the currently displayed media
         private int imageSlideDelay = 50;// Delay for each image slide
         private int slideCount = 0; // Counter for the number of slides displayed
-        private bool isVideoPlaying = false; // Flag to indicate if a video is currently playing
         private int previousVideoIndex = -1; // Index of the previously played video
+        
+        private int playbackCounter = 0;
+        private int maxPlaybackCount = 10; // Set this to the count after which the media type should switch
+        private bool isVideoPlaying = false; // Flag to indicate if a video is currently playing
         private bool isSlidePlaying = false;
         private bool loadingpptx = false;
-        private DispatcherTimer timer; // Timer for slideshow
         private int powerpointChance = 33;
         private int videoChance = 33;
         private bool canSwitchMediaTypeToPPT = false;
         private bool isVideo = false; // Flag to indicate if the current media is a video
 
-        private int playbackCounter = 0;
-        private int maxPlaybackCount = 10; // Set this to the count after which the media type should switch
 
         private string[][] powerPointFiles;
 

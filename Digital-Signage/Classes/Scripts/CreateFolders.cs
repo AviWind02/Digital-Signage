@@ -14,7 +14,7 @@ namespace Digital_Signage.Classes
             string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
 
             // Define weekday folders
-            string[] weekdays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+            string[] weekdays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Fallback", "Special" };
 
             // Define subfolders for each weekday
             string[] subFolders = { "Images", "Level Images", "PowerPoint", "PowerPoint\\PowerPointImages", "Videos" };
