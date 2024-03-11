@@ -69,8 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\CreateFolders.cs" />
     <Compile Include="Classes\ImageProcessor.cs" />
     <Compile Include="Classes\MediaCollection.cs" />
+    <Compile Include="Classes\MediaFolderManager.cs" />
     <Compile Include="Classes\PowerPoint\PowerPointManager.cs" />
     <Page Include="Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

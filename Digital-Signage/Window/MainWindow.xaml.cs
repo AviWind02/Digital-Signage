@@ -122,17 +122,20 @@ namespace Digital_Signage
 
             try
             {
+
                 //Define base folder path for media storage
                 string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+                string specialFolderPath = Path.Combine(baseFolderPath, "SpecialFolder");
+                MediaFolderManager pathManager = new MediaFolderManager(baseFolderPath, specialFolderPath);
 
-                //Define folder paths for each media type
-                string imagesFolderPath = Path.Combine(baseFolderPath, "Images");
-                string levelImagesFolderPath = Path.Combine(baseFolderPath, "Level Images");
-                string powerpointFolderPath = Path.Combine(baseFolderPath, "PowerPoint");
-                string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
-                string videosFolderPath = Path.Combine(baseFolderPath, "Videos");
+                //Retrieve folder paths for each media type
+                string imagesFolderPath = pathManager.GetMediaFolderPath("Images");
+                string levelImagesFolderPath = pathManager.GetMediaFolderPath("Level Images");
+                string powerpointFolderPath = pathManager.GetMediaFolderPath("PowerPoint");
+                string powerpointImagesFolderPath = pathManager.GetMediaFolderPath("PowerPoint\\PowerPointImages");
+                string videosFolderPath = pathManager.GetMediaFolderPath("Videos");
 
-                //Retrieve media from respective folders
+                //Retrieve and process media based on the paths provided by pathManager
                 GetMediaFromFolder(imagesFolderPath, mediaCollection.Images);
                 GetMediaFromFolder(levelImagesFolderPath, mediaCollection.ImageLevels);
                 GetMediaFromFolder(powerpointImagesFolderPath, mediaCollection.PowerpointImages);
