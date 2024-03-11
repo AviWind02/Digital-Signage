@@ -252,6 +252,7 @@ namespace Digital_Signage
             //Set the slide show flag to true
             isSlidePlaying = true;
             string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+            baseFolderPath = Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd"));
             string powerpointImagesFolderPath = Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
 
             Console.WriteLine($"Current Folder Index: {currentFolderIndex}, Current Slide Index: {currentSlideIndex}");
