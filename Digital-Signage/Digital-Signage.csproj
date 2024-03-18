@@ -51,6 +51,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -69,11 +70,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\Scripts\CreateFolders.cs" />
-    <Compile Include="Classes\Media\MediaCollection.cs" />
-    <Compile Include="Classes\Media\MediaFolderManager.cs" />
-    <Compile Include="Classes\PowerPoint\PowerPointManager.cs" />
-    <Page Include="Window\MainWindow.xaml">
+    <Compile Include="Config\ConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Config\ConfigForm.Designer.cs">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Signage\Classes\Scripts\CreateFolders.cs" />
+    <Compile Include="Signage\Classes\Media\MediaCollection.cs" />
+    <Compile Include="Signage\Classes\Media\MediaFolderManager.cs" />
+    <Compile Include="Signage\Classes\PowerPoint\PowerPointManager.cs" />
+    <Page Include="Signage\Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -81,9 +88,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\Math\NumericStringComparer .cs" />
-    <Compile Include="Classes\PowerPoint\PowerPointExtractor.cs" />
-    <Compile Include="Window\MainWindow.xaml.cs">
+    <Compile Include="Signage\Classes\Math\NumericStringComparer .cs" />
+    <Compile Include="Signage\Classes\PowerPoint\PowerPointExtractor.cs" />
+    <Compile Include="Signage\Window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +109,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Config\ConfigForm.resx">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -115,6 +125,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Config\Classes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

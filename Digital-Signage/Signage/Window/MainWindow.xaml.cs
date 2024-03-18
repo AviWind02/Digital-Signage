@@ -8,6 +8,9 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using Digital_Signage.Classes;
 using System.ComponentModel;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
+using System.Globalization;
 
 
 namespace Digital_Signage
@@ -25,14 +28,20 @@ namespace Digital_Signage
         private int slideCount = 0; // Counter for the number of slides displayed
         private int previousVideoIndex = -1; // Index of the previously played video
         
-        private int playbackCounter = 0;
-        private int maxPlaybackCount = 10; // Set this to the count after which the media type should switch
+        private int playbackCounter_PPT = 0;
+        private int playbackCounter_Video = 0;
+        private int maxPlaybackCount_PPT = 10; // Set this to the count after which the media type should switch
+        private int maxPlaybackCount_Video = 5; // Set this to the count after which the media type should switch
+        private int powerpointChance = 30;
+        private int videoChance = 30;
+
         private bool isVideoPlaying = false; // Flag to indicate if a video is currently playing
         private bool isSlidePlaying = false;
         private bool loadingpptx = false;
-        private int powerpointChance = 33;
-        private int videoChance = 33;
         private bool canSwitchMediaTypeToPPT = false;
+        private bool canSwitchMediaTypeToVideo = false;
+        private bool canPlaySlide = false;
+
         private bool isVideo = false; // Flag to indicate if the current media is a video
 
 
@@ -88,14 +97,14 @@ namespace Digital_Signage
                 }
                 else
                 {
-                    // Key exists, retrieve values and populate textboxes
-                  //  string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
+                    //Key exists, retrieve values and populate textboxes
+                    //string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
                     string powerPoint = digiSignKey.GetValue(powerPointValue, string.Empty) as string;
                     string videos = digiSignKey.GetValue(videosValue, string.Empty) as string;
-                   // string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
+                    //string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
 
 
-                    // Assuming you have four textboxes: textBox1, textBox2, textBox3, textBox4
+                    //Assuming you have four textboxes: textBox1, textBox2, textBox3, textBox4
                     //levelImageChance = int.Parse(levelImages);
                     powerpointChance = int.Parse(powerPoint);
                     videoChance = int.Parse(videos);
@@ -120,7 +129,13 @@ namespace Digital_Signage
 
             try
             {
+                UpdateScrollingText("Exploring the Enigmatic World of Quantum Physics: Unraveling the mysteries of quantum mechanics, scientists delve into the subatomic realm, uncovering the peculiar behaviors of particles that defy classical physics. From quantum entanglement, where particles instantaneously affect each other across vast distances, to the uncertainty principle, where the position and velocity of a particle cannot be simultaneously known, the quantum world challenges our understanding of reality. As researchers push the boundaries of knowledge, they discover potential applications in quantum computing, promising unprecedented processing power and security. This journey into the quantum dimension not only revolutionizes technology but also offers profound insights into the fundamental nature of the universe, blurring the lines between the possible and the impossible.");
 
+          
+
+                //Show ConfigWindowTemp
+                Config.ConfigForm configFormOBJ = new Config.ConfigForm();
+                configFormOBJ.Show();
                 //Define base folder path for media storage
                 string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
                 string specialFolderPath = Path.Combine(baseFolderPath, "SpecialFolder");
@@ -203,7 +218,8 @@ namespace Digital_Signage
 
         private void timerTick(object sender, EventArgs e)
         {
-
+            if (!canPlaySlide)
+                return;
             //Caution: Explicitly invoking garbage collection is generally not recommended.
             //GC.Collect();
 
@@ -219,14 +235,14 @@ namespace Digital_Signage
                 slideCount++;//Logging - Does nothing in the code; just keep counts
                 Console.WriteLine($"Slide count incremented to: {slideCount}");
 
-                // Determine whether to show a PowerPoint slide, video, or regular image
-                if ((ShouldPlaySlide() || isSlidePlaying) && !canSwitchMediaTypeToPPT)
+                //Determine whether to show a PowerPoint slide, video, or regular image
+                if ((ShouldPlaySlide() || isSlidePlaying) && canSwitchMediaTypeToPPT)
                 {
                     ShowPowerPointSlide();
                 }
                 else
                 {
-                    if (ShouldPlayVideo())
+                    if (ShouldPlayVideo() && canSwitchMediaTypeToVideo)
                     {
                         ShowVideo();
                         ControlMediaPlayback();
@@ -288,7 +304,7 @@ namespace Digital_Signage
 
                 //Stop the slideshow
                 isSlidePlaying = false;
-                canSwitchMediaTypeToPPT = true;
+                canSwitchMediaTypeToPPT = false;
 
                 //Move to the next folder
                 currentFolderIndex++;
@@ -316,6 +332,7 @@ namespace Digital_Signage
                 previousVideoIndex = index;
                 SetVideoSource(mediaCollection.Videos[index]);
                 Console.WriteLine($"Showing Video: {mediaCollection.Videos[index]}");
+                canSwitchMediaTypeToVideo = false;
                 isVideoPlaying = true;
             }
             catch (Exception ex)
@@ -344,15 +361,29 @@ namespace Digital_Signage
         {
             try
             {
-                playbackCounter++;
-                Console.WriteLine($"Playback Counter: {playbackCounter}");
-
-                if (playbackCounter >= maxPlaybackCount)
+                if (!canSwitchMediaTypeToPPT)
                 {
-                    canSwitchMediaTypeToPPT = false;
-                    playbackCounter = 0; // Reset the counter for the next cycle
-                    Console.WriteLine("Reached maximum playback count. Ready to switch media type.");
+                    playbackCounter_PPT++;
+                    Console.WriteLine($"Playback Counter PPT: {playbackCounter_PPT}");
                 }
+                if (!canSwitchMediaTypeToVideo)
+                {
+                    playbackCounter_Video++;
+                    Console.WriteLine($"Playback Counter Video: {playbackCounter_Video}");
+                }
+                if ((playbackCounter_PPT >= maxPlaybackCount_PPT))
+                {
+                    canSwitchMediaTypeToPPT = true;
+                    playbackCounter_PPT = 0;
+                    Console.WriteLine("Reached maximum playback count. Ready to switch media type to PPT.");
+                }
+                if ((playbackCounter_Video >= maxPlaybackCount_Video))
+                {
+                    canSwitchMediaTypeToVideo = true;
+                    playbackCounter_Video = 0;
+                    Console.WriteLine("Reached maximum playback count. Ready to switch media type to Video.");
+                }
+                
             }
             catch (Exception ex)
             {
@@ -393,7 +424,7 @@ namespace Digital_Signage
 
         private void ToggleVisibility(bool showImageControl)
         {
-            // Toggle visibility between image and video controls
+            //Toggle visibility between image and video controls
             imageControl.Visibility = showImageControl ? Visibility.Visible : Visibility.Collapsed;
             mediaElement.Visibility = !showImageControl ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -466,10 +497,62 @@ namespace Digital_Signage
         }
 
 
+        private void UpdateScrollingText(string newText)
+        {
+            //Update the text
+            scrollingText.Text = newText;
+            StartScrollingTextAnimation();
 
+        }
 
+        private void StartScrollingTextAnimation()
+        {
+            double startX = this.ActualWidth; //Start from the right edge of the window
 
+            //Calculate the end position based on the text width
+            Size formattedTextSize = MeasureString(scrollingText.Text, scrollingText.FontSize, scrollingText.FontFamily, scrollingText.FontStyle, scrollingText.FontWeight, scrollingText.FontStretch);
+            double endX = -formattedTextSize.Width; //Ensure the entire text scrolls out of view
+
+            //Adjust the duration based on the length of the text
+            double durationPerCharacter = 0.1; //Duration per character in seconds
+            double totalDuration = scrollingText.Text.Length * durationPerCharacter;
+
+            //Create a TranslateTransform for the TextBlock
+            TranslateTransform translateTransform = new TranslateTransform();
+            scrollingText.RenderTransform = translateTransform;
+
+            //Create and start the animation
+            DoubleAnimation scrollAnimation = new DoubleAnimation
+            {
+                From = startX,
+                To = endX,
+                RepeatBehavior = RepeatBehavior.Forever,
+                Duration = new Duration(TimeSpan.FromSeconds(totalDuration))
+            };
+            translateTransform.BeginAnimation(TranslateTransform.XProperty, scrollAnimation);
+        }
+
+        //Method to adjust speed factor - Fuck you danny - idfk how you did it before
+        private Size MeasureString(string text, double fontSize, FontFamily fontFamily, FontStyle fontStyle, FontWeight fontWeight, FontStretch fontStretch)
+        {
+            var typeface = new Typeface(fontFamily, fontStyle, fontWeight, fontStretch);
+            var formattedText = new FormattedText(
+                text,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                typeface,
+                fontSize,
+                Brushes.Black,
+                new NumberSubstitution(),
+                TextFormattingMode.Display);
+
+            return new Size(formattedText.Width, formattedText.Height);
+        }
 
 
     }
+
+
+
 }
+

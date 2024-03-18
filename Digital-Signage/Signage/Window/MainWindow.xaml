@@ -1,0 +1,33 @@
+﻿<Window x:Class="Digital_Signage.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Digital_Signage"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1080" Width="1920"
+        Loaded="MainWindow_Loaded">
+    <Grid>
+        <Image x:Name="imageControl" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <MediaElement x:Name="mediaElement" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual" MediaEnded="MediaElement_MediaEnded"/>
+
+        <!-- Scroll Box for News Ticker -->
+        <Canvas VerticalAlignment="Bottom" Height="50">
+            <TextBlock x:Name="scrollingText" Text="Your scrolling text here" FontSize="24" Foreground="White">
+                <TextBlock.RenderTransform>
+                    <TranslateTransform x:Name="translateTransform"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Canvas>
+    </Grid>
+
+    <Window.Resources>
+        <Storyboard x:Key="ScrollAnimation">
+            <DoubleAnimation Storyboard.TargetName="translateTransform" 
+                             Storyboard.TargetProperty="X" 
+                             From="1920" To="-{Binding ElementName=scrollingText, Path=ActualWidth}" 
+                             RepeatBehavior="Forever" 
+                             Duration="0:0:15"/>
+        </Storyboard>
+    </Window.Resources>
+</Window>
