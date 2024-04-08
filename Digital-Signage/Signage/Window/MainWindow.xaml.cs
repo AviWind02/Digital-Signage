@@ -34,6 +34,7 @@ namespace Digital_Signage
         private int maxPlaybackCount_Video = 5; // Set this to the count after which the media type should switch
         private int powerpointChance = 30;
         private int videoChance = 30;
+        private int delayPerSlide = 5;
 
         private bool isVideoPlaying = false; // Flag to indicate if a video is currently playing
         private bool isSlidePlaying = false;
@@ -46,7 +47,6 @@ namespace Digital_Signage
 
 
         private string[][] powerPointFiles;
-
 
         enum Mediatypes
         {
@@ -69,55 +69,24 @@ namespace Digital_Signage
             GC.Collect();
         }
 
-        //Checks to see if the key "Computer\HKEY_CURRENT_USER\DigiSign" exists and gets the values under that key.
-        public void CheckAndRetrieveRegistryValues()
+        public void UpdateConfiguration(int newMaxPlaybackCount_PPT, int newMaxPlaybackCount_Video, int newPowerpointChance, int newVideoChance, int newDelayPerSlide)
         {
-            const string baseKey = "HKEY_CURRENT_USER";
-            const string subKey = "DigiSign";
-            const string levelImagesValue = "Level Images";
-            const string powerPointValue = "PowerPoint";
-            const string videosValue = "Videos";
-            const string imagesValue = "Images";
+            Console.WriteLine("Updating configuration...");
 
-            try
-            {
-                RegistryKey digiSignKey = Registry.CurrentUser.OpenSubKey(subKey);
-                if (digiSignKey == null)
-                {
-                    // Key doesn't exist, create the key and add values
-                    Registry.CurrentUser.CreateSubKey(subKey);
+            maxPlaybackCount_PPT = newMaxPlaybackCount_PPT;
+            maxPlaybackCount_Video = newMaxPlaybackCount_Video;
+            powerpointChance = newPowerpointChance;
+            videoChance = newVideoChance;
+            delayPerSlide = newDelayPerSlide;
 
-                    //Registry.SetValue($"{baseKey}\\{subKey}", levelImagesValue, string.Empty);
-                    Registry.SetValue($"{baseKey}\\{subKey}", powerPointValue, string.Empty);
-                    Registry.SetValue($"{baseKey}\\{subKey}", videosValue, string.Empty);
-                   // Registry.SetValue($"{baseKey}\\{subKey}", imagesValue, string.Empty);
-
-
-                    Console.WriteLine("Registry key and values created successfully!");
-                }
-                else
-                {
-                    //Key exists, retrieve values and populate textboxes
-                    //string levelImages = digiSignKey.GetValue(levelImagesValue, string.Empty) as string;
-                    string powerPoint = digiSignKey.GetValue(powerPointValue, string.Empty) as string;
-                    string videos = digiSignKey.GetValue(videosValue, string.Empty) as string;
-                    //string images = digiSignKey.GetValue(imagesValue, string.Empty) as string;
-
-
-                    //Assuming you have four textboxes: textBox1, textBox2, textBox3, textBox4
-                    //levelImageChance = int.Parse(levelImages);
-                    powerpointChance = int.Parse(powerPoint);
-                    videoChance = int.Parse(videos);
-                    //imageChance = int.Parse(images);
-
-                    Console.WriteLine("Registry values retrieved and populated successfully!");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
+            Console.WriteLine($"Configuration updated: " +
+                $"MaxPlaybackCount_PPT = {maxPlaybackCount_PPT}, " +
+                $"MaxPlaybackCount_Video = {maxPlaybackCount_Video}, " +
+                $"PowerpointChance = {powerpointChance}, " +
+                $"VideoChance = {videoChance}, " +
+                $"DelayPerSlide = {delayPerSlide}.");
         }
+
 
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -129,17 +98,24 @@ namespace Digital_Signage
 
             try
             {
-                UpdateScrollingText("Exploring the Enigmatic World of Quantum Physics: Unraveling the mysteries of quantum mechanics, scientists delve into the subatomic realm, uncovering the peculiar behaviors of particles that defy classical physics. From quantum entanglement, where particles instantaneously affect each other across vast distances, to the uncertainty principle, where the position and velocity of a particle cannot be simultaneously known, the quantum world challenges our understanding of reality. As researchers push the boundaries of knowledge, they discover potential applications in quantum computing, promising unprecedented processing power and security. This journey into the quantum dimension not only revolutionizes technology but also offers profound insights into the fundamental nature of the universe, blurring the lines between the possible and the impossible.");
+                UpdateScrollingText("Exploring Danny's Ass.");
 
           
 
                 //Show ConfigWindowTemp
-                Config.ConfigForm configFormOBJ = new Config.ConfigForm();
+                Config.ConfigForm configFormOBJ = new Config.ConfigForm(powerpointChance, playbackCounter_Video, 
+                    maxPlaybackCount_PPT, maxPlaybackCount_Video, powerpointChance, videoChance, delayPerSlide);
+
                 configFormOBJ.Show();
+
+
                 //Define base folder path for media storage
                 string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
                 string specialFolderPath = Path.Combine(baseFolderPath, "SpecialFolder");
                 MediaFolderManager pathManager = new MediaFolderManager(baseFolderPath, specialFolderPath);
+
+                //Set baseMainDirPath
+                configFormOBJ.miscFolderPath = pathManager.GetMediaFolderPath("Config");
 
                 //Retrieve folder paths for each media type
                 string imagesFolderPath = pathManager.GetMediaFolderPath("Images");
@@ -438,13 +414,12 @@ namespace Digital_Signage
 
         private void CountDownDelay()
         {
-            int countdownTime = 5; // Countdown for 5 seconds
-            Console.WriteLine($"Starting countdown for {countdownTime} seconds...");
+            Console.WriteLine($"Starting countdown for {delayPerSlide} seconds...");
 
-            for (int i = countdownTime; i > 0; i--)
+            for (int i = delayPerSlide; i > 0; i--)
             {
                 Console.WriteLine($"{i}...");
-                Thread.Sleep(1000); // Sleep for 1 second
+                Thread.Sleep(1000); 
             }
 
             Console.WriteLine("Continuing to next slide/image.");
@@ -514,7 +489,7 @@ namespace Digital_Signage
             double endX = -formattedTextSize.Width; //Ensure the entire text scrolls out of view
 
             //Adjust the duration based on the length of the text
-            double durationPerCharacter = 0.1; //Duration per character in seconds
+            double durationPerCharacter = 0.5; //Duration per character in seconds
             double totalDuration = scrollingText.Text.Length * durationPerCharacter;
 
             //Create a TranslateTransform for the TextBlock
