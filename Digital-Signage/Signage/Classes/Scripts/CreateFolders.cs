@@ -3,11 +3,42 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 namespace Digital_Signage.Classes
 {
     internal class CreateFolders
     {
+        public void OpenDir() {
+
+            string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+
+            // Check if the directory exists
+            if (!Directory.Exists(baseFolderPath))
+            {
+                Console.WriteLine("Error: Directory does not exist.");
+                return;
+            }
+
+            try
+            {
+                // Start a new process to open the directory using the default file explorer
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = baseFolderPath,
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
+                Console.WriteLine("Directory opened: " + baseFolderPath);
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to open the directory: " + ex.Message);
+                return;
+            }
+        }
+
         public void run()
         {
             // Define the base folder path in the user's Documents directory

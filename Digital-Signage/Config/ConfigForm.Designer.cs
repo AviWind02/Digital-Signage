@@ -39,16 +39,16 @@ namespace Digital_Signage.Config
             this.textSpeedComboBox = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
+            this.buttonOpenLogs = new System.Windows.Forms.Button();
+            this.buttonSaveLogs = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBoxPowerPointRate = new System.Windows.Forms.TextBox();
+            this.textBoxCounterPerVideo = new System.Windows.Forms.TextBox();
+            this.textBoxCounterPerPPT = new System.Windows.Forms.TextBox();
+            this.textBoxSlideDelay = new System.Windows.Forms.TextBox();
+            this.textBoxImageRate = new System.Windows.Forms.TextBox();
+            this.textBoxVideoRate = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
@@ -56,8 +56,8 @@ namespace Digital_Signage.Config
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonSaveValues = new System.Windows.Forms.Button();
+            this.buttonLoadValues = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button8 = new System.Windows.Forms.Button();
@@ -70,10 +70,11 @@ namespace Digital_Signage.Config
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button_install = new System.Windows.Forms.Button();
             this.Tag = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label11 = new System.Windows.Forms.Label();
+            this.buttonPlayPause = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -126,6 +127,7 @@ namespace Digital_Signage.Config
             // 
             // textBoxCustomTextSpeedScroll
             // 
+            this.textBoxCustomTextSpeedScroll.Enabled = false;
             this.textBoxCustomTextSpeedScroll.Location = new System.Drawing.Point(108, 50);
             this.textBoxCustomTextSpeedScroll.Name = "textBoxCustomTextSpeedScroll";
             this.textBoxCustomTextSpeedScroll.Size = new System.Drawing.Size(87, 20);
@@ -135,6 +137,7 @@ namespace Digital_Signage.Config
             // 
             // textSpeedComboBox
             // 
+            this.textSpeedComboBox.Enabled = false;
             this.textSpeedComboBox.FormattingEnabled = true;
             this.textSpeedComboBox.Location = new System.Drawing.Point(74, 23);
             this.textSpeedComboBox.Name = "textSpeedComboBox";
@@ -155,8 +158,8 @@ namespace Digital_Signage.Config
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button10);
-            this.groupBox2.Controls.Add(this.button9);
+            this.groupBox2.Controls.Add(this.buttonOpenLogs);
+            this.groupBox2.Controls.Add(this.buttonSaveLogs);
             this.groupBox2.Controls.Add(this.button6);
             this.groupBox2.Location = new System.Drawing.Point(12, 168);
             this.groupBox2.Name = "groupBox2";
@@ -165,26 +168,29 @@ namespace Digital_Signage.Config
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Logging";
             // 
-            // button10
+            // buttonOpenLogs
             // 
-            this.button10.Location = new System.Drawing.Point(6, 19);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 37;
-            this.button10.Text = "Open Logs";
-            this.button10.UseVisualStyleBackColor = true;
+            this.buttonOpenLogs.Location = new System.Drawing.Point(6, 19);
+            this.buttonOpenLogs.Name = "buttonOpenLogs";
+            this.buttonOpenLogs.Size = new System.Drawing.Size(75, 23);
+            this.buttonOpenLogs.TabIndex = 37;
+            this.buttonOpenLogs.Text = "Open Logs";
+            this.buttonOpenLogs.UseVisualStyleBackColor = true;
+            this.buttonOpenLogs.Click += new System.EventHandler(this.buttonOpenLogs_Click);
             // 
-            // button9
+            // buttonSaveLogs
             // 
-            this.button9.Location = new System.Drawing.Point(183, 19);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 23);
-            this.button9.TabIndex = 36;
-            this.button9.Text = "Clear Logs";
-            this.button9.UseVisualStyleBackColor = true;
+            this.buttonSaveLogs.Enabled = false;
+            this.buttonSaveLogs.Location = new System.Drawing.Point(183, 19);
+            this.buttonSaveLogs.Name = "buttonSaveLogs";
+            this.buttonSaveLogs.Size = new System.Drawing.Size(75, 23);
+            this.buttonSaveLogs.TabIndex = 36;
+            this.buttonSaveLogs.Text = "Save Logs";
+            this.buttonSaveLogs.UseVisualStyleBackColor = true;
             // 
             // button6
             // 
+            this.button6.Enabled = false;
             this.button6.Location = new System.Drawing.Point(87, 19);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(90, 23);
@@ -194,12 +200,12 @@ namespace Digital_Signage.Config
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.textBox10);
-            this.groupBox3.Controls.Add(this.textBox6);
-            this.groupBox3.Controls.Add(this.textBox5);
-            this.groupBox3.Controls.Add(this.textBox4);
-            this.groupBox3.Controls.Add(this.textBox3);
-            this.groupBox3.Controls.Add(this.textBox2);
+            this.groupBox3.Controls.Add(this.textBoxPowerPointRate);
+            this.groupBox3.Controls.Add(this.textBoxCounterPerVideo);
+            this.groupBox3.Controls.Add(this.textBoxCounterPerPPT);
+            this.groupBox3.Controls.Add(this.textBoxSlideDelay);
+            this.groupBox3.Controls.Add(this.textBoxImageRate);
+            this.groupBox3.Controls.Add(this.textBoxVideoRate);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.button3);
@@ -207,8 +213,8 @@ namespace Digital_Signage.Config
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.button2);
-            this.groupBox3.Controls.Add(this.button1);
+            this.groupBox3.Controls.Add(this.buttonSaveValues);
+            this.groupBox3.Controls.Add(this.buttonLoadValues);
             this.groupBox3.Location = new System.Drawing.Point(12, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(271, 150);
@@ -216,47 +222,50 @@ namespace Digital_Signage.Config
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Slide Change Config";
             // 
-            // textBox10
+            // textBoxPowerPointRate
             // 
-            this.textBox10.Location = new System.Drawing.Point(70, 19);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(36, 20);
-            this.textBox10.TabIndex = 34;
+            this.textBoxPowerPointRate.Location = new System.Drawing.Point(70, 19);
+            this.textBoxPowerPointRate.Name = "textBoxPowerPointRate";
+            this.textBoxPowerPointRate.Size = new System.Drawing.Size(36, 20);
+            this.textBoxPowerPointRate.TabIndex = 34;
+            this.textBoxPowerPointRate.TextChanged += new System.EventHandler(this.textBoxPowerPointRate_TextChanged);
             // 
-            // textBox6
+            // textBoxCounterPerVideo
             // 
-            this.textBox6.Location = new System.Drawing.Point(186, 41);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(36, 20);
-            this.textBox6.TabIndex = 33;
+            this.textBoxCounterPerVideo.Location = new System.Drawing.Point(186, 41);
+            this.textBoxCounterPerVideo.Name = "textBoxCounterPerVideo";
+            this.textBoxCounterPerVideo.Size = new System.Drawing.Size(36, 20);
+            this.textBoxCounterPerVideo.TabIndex = 33;
             // 
-            // textBox5
+            // textBoxCounterPerPPT
             // 
-            this.textBox5.Location = new System.Drawing.Point(186, 19);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(36, 20);
-            this.textBox5.TabIndex = 32;
+            this.textBoxCounterPerPPT.Location = new System.Drawing.Point(186, 19);
+            this.textBoxCounterPerPPT.Name = "textBoxCounterPerPPT";
+            this.textBoxCounterPerPPT.Size = new System.Drawing.Size(36, 20);
+            this.textBoxCounterPerPPT.TabIndex = 32;
             // 
-            // textBox4
+            // textBoxSlideDelay
             // 
-            this.textBox4.Location = new System.Drawing.Point(70, 97);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(36, 20);
-            this.textBox4.TabIndex = 31;
+            this.textBoxSlideDelay.Location = new System.Drawing.Point(70, 97);
+            this.textBoxSlideDelay.Name = "textBoxSlideDelay";
+            this.textBoxSlideDelay.Size = new System.Drawing.Size(36, 20);
+            this.textBoxSlideDelay.TabIndex = 31;
             // 
-            // textBox3
+            // textBoxImageRate
             // 
-            this.textBox3.Location = new System.Drawing.Point(70, 71);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(36, 20);
-            this.textBox3.TabIndex = 30;
+            this.textBoxImageRate.Location = new System.Drawing.Point(70, 71);
+            this.textBoxImageRate.Name = "textBoxImageRate";
+            this.textBoxImageRate.ReadOnly = true;
+            this.textBoxImageRate.Size = new System.Drawing.Size(36, 20);
+            this.textBoxImageRate.TabIndex = 30;
             // 
-            // textBox2
+            // textBoxVideoRate
             // 
-            this.textBox2.Location = new System.Drawing.Point(70, 45);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(36, 20);
-            this.textBox2.TabIndex = 29;
+            this.textBoxVideoRate.Location = new System.Drawing.Point(70, 45);
+            this.textBoxVideoRate.Name = "textBoxVideoRate";
+            this.textBoxVideoRate.Size = new System.Drawing.Size(36, 20);
+            this.textBoxVideoRate.TabIndex = 29;
+            this.textBoxVideoRate.TextChanged += new System.EventHandler(this.textBoxVideoRate_TextChanged);
             // 
             // label6
             // 
@@ -283,6 +292,7 @@ namespace Digital_Signage.Config
             // 
             // button3
             // 
+            this.button3.Enabled = false;
             this.button3.Location = new System.Drawing.Point(3, 121);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(96, 23);
@@ -334,30 +344,32 @@ namespace Digital_Signage.Config
             this.toolTip1.SetToolTip(this.label1, "This is the percentage rate that indicates the chance of a PowerPoint presentatio" +
         "n playing after a video or slide.");
             // 
-            // button2
+            // buttonSaveValues
             // 
-            this.button2.Location = new System.Drawing.Point(105, 121);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Save Values";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonSaveValues.Location = new System.Drawing.Point(105, 121);
+            this.buttonSaveValues.Name = "buttonSaveValues";
+            this.buttonSaveValues.Size = new System.Drawing.Size(75, 23);
+            this.buttonSaveValues.TabIndex = 1;
+            this.buttonSaveValues.Text = "Save Values";
+            this.buttonSaveValues.UseVisualStyleBackColor = true;
+            this.buttonSaveValues.Click += new System.EventHandler(this.buttonSave_Click);
             // 
-            // button1
+            // buttonLoadValues
             // 
-            this.button1.Location = new System.Drawing.Point(186, 121);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Load Values";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.buttonLoad_Click);
+            this.buttonLoadValues.Location = new System.Drawing.Point(186, 121);
+            this.buttonLoadValues.Name = "buttonLoadValues";
+            this.buttonLoadValues.Size = new System.Drawing.Size(75, 23);
+            this.buttonLoadValues.TabIndex = 0;
+            this.buttonLoadValues.Text = "Load Values";
+            this.buttonLoadValues.UseVisualStyleBackColor = true;
+            this.buttonLoadValues.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
             // textBox1
             // 
+            this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(9, 91);
             this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(36, 20);
             this.textBox1.TabIndex = 2;
             // 
@@ -382,6 +394,7 @@ namespace Digital_Signage.Config
             // 
             // button8
             // 
+            this.button8.Enabled = false;
             this.button8.Location = new System.Drawing.Point(6, 121);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(101, 23);
@@ -397,11 +410,14 @@ namespace Digital_Signage.Config
             this.button7.TabIndex = 35;
             this.button7.Text = "Open Directory";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button_OpenDirectory);
             // 
             // textBox9
             // 
+            this.textBox9.Enabled = false;
             this.textBox9.Location = new System.Drawing.Point(117, 91);
             this.textBox9.Name = "textBox9";
+            this.textBox9.ReadOnly = true;
             this.textBox9.Size = new System.Drawing.Size(36, 20);
             this.textBox9.TabIndex = 38;
             // 
@@ -429,8 +445,10 @@ namespace Digital_Signage.Config
             // 
             // textBox8
             // 
+            this.textBox8.Enabled = false;
             this.textBox8.Location = new System.Drawing.Point(61, 91);
             this.textBox8.Name = "textBox8";
+            this.textBox8.ReadOnly = true;
             this.textBox8.Size = new System.Drawing.Size(36, 20);
             this.textBox8.TabIndex = 35;
             // 
@@ -454,6 +472,7 @@ namespace Digital_Signage.Config
             // 
             // button4
             // 
+            this.button4.Enabled = false;
             this.button4.Location = new System.Drawing.Point(6, 45);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(208, 23);
@@ -463,8 +482,9 @@ namespace Digital_Signage.Config
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.buttonPlayPause);
+            this.groupBox5.Controls.Add(this.button_install);
             this.groupBox5.Controls.Add(this.Tag);
-            this.groupBox5.Controls.Add(this.checkBox1);
             this.groupBox5.Controls.Add(this.label11);
             this.groupBox5.Location = new System.Drawing.Point(12, 222);
             this.groupBox5.Name = "groupBox5";
@@ -473,24 +493,15 @@ namespace Digital_Signage.Config
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Misc";
             // 
-            // label11
+            // button_install
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 22);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(204, 13);
-            this.label11.TabIndex = 0;
-            this.label11.Text = "HotKey To Open/Close Config: CTRL + X";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(9, 51);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(111, 17);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Open On Start Up";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.button_install.Location = new System.Drawing.Point(7, 38);
+            this.button_install.Name = "button_install";
+            this.button_install.Size = new System.Drawing.Size(170, 31);
+            this.button_install.TabIndex = 41;
+            this.button_install.Text = "Init Digital Signage ";
+            this.button_install.UseVisualStyleBackColor = true;
+            this.button_install.Click += new System.EventHandler(this.button_install_Click);
             // 
             // Tag
             // 
@@ -503,6 +514,25 @@ namespace Digital_Signage.Config
             this.toolTip1.SetToolTip(this.Tag, "This is the percentage rate that indicates the chance of a PowerPoint presentatio" +
         "n playing after a video or slide.");
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 22);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(204, 13);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "HotKey To Open/Close Config: CTRL + X";
+            // 
+            // buttonPlayPause
+            // 
+            this.buttonPlayPause.Enabled = false;
+            this.buttonPlayPause.Location = new System.Drawing.Point(226, 18);
+            this.buttonPlayPause.Name = "buttonPlayPause";
+            this.buttonPlayPause.Size = new System.Drawing.Size(39, 35);
+            this.buttonPlayPause.TabIndex = 42;
+            this.buttonPlayPause.Text = "Play";
+            this.buttonPlayPause.UseVisualStyleBackColor = true;
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -514,7 +544,8 @@ namespace Digital_Signage.Config
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "ConfigForm";
-            this.Text = "Form1";
+            this.Text = "Digital Signage";
+            this.Load += new System.EventHandler(this.ConfigForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -535,8 +566,8 @@ namespace Digital_Signage.Config
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonLoadValues;
+        private System.Windows.Forms.Button buttonSaveValues;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
@@ -546,11 +577,11 @@ namespace Digital_Signage.Config
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private Label lbl;
-        private TextBox textBox5;
-        private TextBox textBox4;
-        private TextBox textBox3;
-        private TextBox textBox2;
-        private TextBox textBox6;
+        private TextBox textBoxCounterPerPPT;
+        private TextBox textBoxSlideDelay;
+        private TextBox textBoxImageRate;
+        private TextBox textBoxVideoRate;
+        private TextBox textBoxCounterPerVideo;
         private ToolTip toolTip1;
         private TextBox textBox7;
         private Button button4;
@@ -560,8 +591,8 @@ namespace Digital_Signage.Config
         private Label label8;
         private TextBox textBox8;
         private Label label7;
-        private TextBox textBox10;
-        private Button button9;
+        private TextBox textBoxPowerPointRate;
+        private Button buttonSaveLogs;
         private Button button8;
         private Button button7;
         private ComboBox textSpeedComboBox;
@@ -569,9 +600,10 @@ namespace Digital_Signage.Config
         private TextBox textBoxCustomTextSpeedScroll;
         private Label labelCustomTextSpeedScroll;
         private Button buttonOpenTxtFile;
-        private Button button10;
-        private Label label11;
-        private CheckBox checkBox1;
+        private Button buttonOpenLogs;
         private Label Tag;
+        private Button button_install;
+        private Button buttonPlayPause;
+        private Label label11;
     }
 }

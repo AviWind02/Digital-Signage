@@ -1,10 +1,12 @@
 ﻿using Digital_Signage.Classes;
 using Digital_Signage.Config.Classes;
+using Digital_Signage.Signage.Classes.Scripts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +28,13 @@ namespace Digital_Signage.Config
         private MainWindow mainWindow;
         private FileOperations fileOperations;
         private MediaFolderManager mediaFolderManager;
+        private CreateFolders createFolders;
+        private RegistryHandler registryConfigManager;
+        private DualWriter dualWriter;
 
         public string miscFolderPath { get; set; }
+
+
 
         public ConfigForm(int playbackCounter_PPT, int playbackCounter_Video, 
                           int maxPlaybackCount_PPT, int maxPlaybackCount_Video, 
@@ -51,35 +58,44 @@ namespace Digital_Signage.Config
 
 
         }
-
-
-        RegistryHandler registryConfigManager = new RegistryHandler();
-
-
-        private void saveConfiguration()
+        private void ConfigForm_Load(object sender, EventArgs e)
         {
-            registryConfigManager.WriteRegistryValue("MaxPlaybackCountPPT", maxPlaybackCount_PPT);
-            registryConfigManager.WriteRegistryValue("MaxPlaybackCountVideo", maxPlaybackCount_Video);
-            registryConfigManager.WriteRegistryValue("PowerPointChance", powerpointChance);
-            registryConfigManager.WriteRegistryValue("VideoChance", videoChance);
-            registryConfigManager.WriteRegistryValue("Slide Delay", delayPerSlide);
+            createFolders = new CreateFolders();
+            registryConfigManager = new RegistryHandler();
+            dualWriter = new DualWriter();
+            loadValues();
+
+            textBoxPowerPointRate.Text = registryConfigManager.ReadRegistryValue("PowerPointChance").ToString();
+            textBoxVideoRate.Text = registryConfigManager.ReadRegistryValue("VideoChance").ToString();
+            textBoxImageRate.Text = registryConfigManager.ReadRegistryValue("ImageChance").ToString();
+
+            textBoxSlideDelay.Text = registryConfigManager.ReadRegistryValue("Slide Delay").ToString();
+            textBoxCounterPerPPT.Text = registryConfigManager.ReadRegistryValue("MaxPlaybackCountVideo").ToString();
+            textBoxCounterPerVideo.Text = registryConfigManager.ReadRegistryValue("MaxPlaybackCountVideo").ToString();
+
+            CalculateImageRate(); // Ensure image rate is adjusted based on loaded values
+
 
         }
 
-        private void loadConfiguration()
+
+
+
+        private void CalculateImageRate()
         {
-
-            maxPlaybackCount_PPT = maxPlaybackCount_PPT = registryConfigManager.ReadRegistryValue("MaxPlaybackCountPPT");
-            maxPlaybackCount_Video = registryConfigManager.ReadRegistryValue("MaxPlaybackCountVideo");
-            powerpointChance = registryConfigManager.ReadRegistryValue("PowerPointChance");
-            videoChance = registryConfigManager.ReadRegistryValue("VideoChance");
-            delayPerSlide = registryConfigManager.ReadRegistryValue("Slide Delay");
-
-            mainWindow.UpdateConfiguration(maxPlaybackCount_PPT, 
-                maxPlaybackCount_Video, powerpointChance, videoChance, delayPerSlide);
-
+            // Using int.TryParse to avoid FormatException - Kept getting it on Video rate.
+            if (int.TryParse(textBoxPowerPointRate.Text, out int powerPointRate) &&
+                int.TryParse(textBoxVideoRate.Text, out int videoRate))
+            {
+                int imageRate = 100 - powerPointRate - videoRate;
+                textBoxImageRate.Text = imageRate.ToString();
+                Console.WriteLine("Image rate adjusted: " + imageRate);
+            }
+            else
+            {
+                Console.WriteLine("Error: One or more inputs are not valid numbers. - Can be Ignored");
+            }
         }
-
         private void customSpeedScrollBox(bool b)
         {
             textBoxCustomTextSpeedScroll.Visible = b;
@@ -96,20 +112,31 @@ namespace Digital_Signage.Config
             textSpeedComboBox.Items.Add("Normal");
             textSpeedComboBox.Items.Add("Slow");
             textSpeedComboBox.Items.Add("Custom");
-
-
-
         }
+        private void loadValues()
+        {
+            maxPlaybackCount_PPT = registryConfigManager.ReadRegistryValue("MaxPlaybackCountPPT");
+            maxPlaybackCount_Video = registryConfigManager.ReadRegistryValue("MaxPlaybackCountVideo");
+            powerpointChance = registryConfigManager.ReadRegistryValue("PowerPointChance");
+            videoChance = registryConfigManager.ReadRegistryValue("VideoChance");
+            delayPerSlide = registryConfigManager.ReadRegistryValue("Slide Delay");
 
+            mainWindow.UpdateConfiguration(maxPlaybackCount_PPT,
+                maxPlaybackCount_Video, powerpointChance, videoChance, delayPerSlide);
+        }
 
         private void buttonLoad_Click(object sender, EventArgs e)
         {
-            loadConfiguration();
+            loadValues();
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            saveConfiguration();
+            registryConfigManager.WriteRegistryValue("MaxPlaybackCountPPT", maxPlaybackCount_PPT);
+            registryConfigManager.WriteRegistryValue("MaxPlaybackCountVideo", maxPlaybackCount_Video);
+            registryConfigManager.WriteRegistryValue("PowerPointChance", powerpointChance);
+            registryConfigManager.WriteRegistryValue("VideoChance", videoChance);
+            registryConfigManager.WriteRegistryValue("Slide Delay", delayPerSlide);
 
         }
 
@@ -139,6 +166,31 @@ namespace Digital_Signage.Config
         private void label11_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button_install_Click(object sender, EventArgs e)
+        {
+            createFolders.run();
+        }
+
+        private void button_OpenDirectory(object sender, EventArgs e)
+        {
+            createFolders.OpenDir();
+        }
+
+        private void textBoxPowerPointRate_TextChanged(object sender, EventArgs e)
+        {
+            CalculateImageRate();
+        }
+
+        private void textBoxVideoRate_TextChanged(object sender, EventArgs e)
+        {
+            CalculateImageRate();
+        }
+
+        private void buttonOpenLogs_Click(object sender, EventArgs e)
+        {
+            dualWriter.OpenDir();
         }
     }
 }

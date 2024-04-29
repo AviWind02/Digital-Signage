@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
 using System.Globalization;
+using Digital_Signage.Signage.Classes.Scripts;
 
 
 namespace Digital_Signage
@@ -21,6 +22,7 @@ namespace Digital_Signage
         private PowerPointExtractor powerPointExtractor;
         private NumericStringComparer numericStringComparer;
         private DispatcherTimer timer; // Timer for slideshow
+        private DualWriter dualWriter;
 
         private int currentIndex = 0; // Index of the currently displayed media
         private int currentIndexOfSlide = 0; // Index of the currently displayed media
@@ -56,14 +58,14 @@ namespace Digital_Signage
             LevelImage
         };
 
-
-
+      
         public MainWindow()
         {
             InitializeComponent();
             mediaCollection = new MediaCollection();
             powerPointExtractor = new PowerPointExtractor();
             numericStringComparer = new NumericStringComparer();
+            dualWriter = new DualWriter();
             timer = new DispatcherTimer();
             timer.Tick += timerTick;
             GC.Collect();
@@ -98,6 +100,8 @@ namespace Digital_Signage
 
             try
             {
+                dualWriter.StartLogging();
+
                 UpdateScrollingText("Exploring Danny's Ass.");
 
           
