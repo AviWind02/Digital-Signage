@@ -43,7 +43,7 @@ namespace Digital_Signage
         private bool loadingpptx = false;
         private bool canSwitchMediaTypeToPPT = false;
         private bool canSwitchMediaTypeToVideo = false;
-        private bool canPlaySlide = false;
+        private bool canPlaySlide = true;
 
         private bool isVideo = false; // Flag to indicate if the current media is a video
 
@@ -102,9 +102,11 @@ namespace Digital_Signage
             {
                 dualWriter.StartLogging();
 
-                UpdateScrollingText("Exploring Danny's Ass.");
+                UpdateScrollingText("This is not the final product; this is an alpha test for the slides.");
 
-          
+                // Set the window to be maximized, but not in true full-screen mode
+                this.WindowState = WindowState.Maximized;
+                this.ResizeMode = ResizeMode.NoResize;
 
                 //Show ConfigWindowTemp
                 Config.ConfigForm configFormOBJ = new Config.ConfigForm(powerpointChance, playbackCounter_Video, 

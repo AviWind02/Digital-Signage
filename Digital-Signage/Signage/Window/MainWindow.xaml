@@ -19,6 +19,7 @@
                 </TextBlock.RenderTransform>
             </TextBlock>
         </Canvas>
+        <Label Content="This is not the final product; this is an alpha test for the slides." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48"/>
     </Grid>
 
     <Window.Resources>
