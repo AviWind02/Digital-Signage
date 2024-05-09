@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Office.Interop.PowerPoint;
 using Microsoft.Office.Core;
 
-namespace Re_DigitalSignage.PowerPoint
+namespace DigitalSignage.PowerPoint
 {
     internal class PowerPointExtractor
     {

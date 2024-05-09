@@ -1,9 +1,10 @@
-﻿using Re_DigitalSignage.PowerPoint;
-using Re_DigitalSignage.Utilities;
+﻿using DigitalSignage.PowerPoint;
+using DigitalSignage.Utilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
-namespace Re_DigitalSignage.Media
+namespace DigitalSignage.Media
 {
     internal class MediaManager
     {

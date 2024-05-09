@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiSign_Config_Editor.Properties
+namespace DigitalSignage.Properties
 {
 
 

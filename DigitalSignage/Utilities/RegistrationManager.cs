@@ -1,7 +1,8 @@
 ﻿using Microsoft.Win32;
+using System;
 
 
-namespace Re_DigitalSignage.Utilities
+namespace DigitalSignage.Utilities
 {
     internal class RegistrationManager
     {

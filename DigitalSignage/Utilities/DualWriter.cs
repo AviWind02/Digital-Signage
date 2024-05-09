@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace Re_DigitalSignage.Utilities
+namespace DigitalSignage.Utilities
 {
     public class DualWriter : TextWriter
     {

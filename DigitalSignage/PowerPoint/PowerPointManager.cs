@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Re_DigitalSignage.PowerPoint
+namespace DigitalSignage.PowerPoint
 {
     public class PowerPointManager
     {

@@ -7,7 +7,7 @@
  */
 using System.Collections.Generic;
 
-namespace Re_DigitalSignage.Media
+namespace DigitalSignage.Media
 {
 
  
