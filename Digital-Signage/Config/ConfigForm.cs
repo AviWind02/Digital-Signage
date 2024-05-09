@@ -171,6 +171,11 @@ namespace Digital_Signage.Config
         private void button_install_Click(object sender, EventArgs e)
         {
             createFolders.run();
+            registryConfigManager.WriteRegistryValue("MaxPlaybackCountPPT", maxPlaybackCount_PPT);
+            registryConfigManager.WriteRegistryValue("MaxPlaybackCountVideo", maxPlaybackCount_Video);
+            registryConfigManager.WriteRegistryValue("PowerPointChance", powerpointChance);
+            registryConfigManager.WriteRegistryValue("VideoChance", videoChance);
+            registryConfigManager.WriteRegistryValue("Slide Delay", delayPerSlide);
         }
 
         private void button_OpenDirectory(object sender, EventArgs e)

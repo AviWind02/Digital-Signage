@@ -93,10 +93,6 @@ namespace Digital_Signage
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //Retrieve configuration from registry for non-debug mode
-#if !DEBUG
-    CheckAndRetrieveRegistryValues();
-#endif
 
             try
             {
