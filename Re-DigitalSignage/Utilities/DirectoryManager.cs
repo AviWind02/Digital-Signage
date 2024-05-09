@@ -9,11 +9,14 @@ namespace Re_DigitalSignage.Utilities
 {
     internal class DirectoryManager
     {
-
+        public string GetBasePath()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+        }
         public void OpenDirectory()
         {
 
-            string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+            string baseFolderPath = GetBasePath();
 
             // Check if the directory exists
             if (!Directory.Exists(baseFolderPath))
@@ -44,7 +47,7 @@ namespace Re_DigitalSignage.Utilities
         public void Run()
         {
             // Define the base folder path in the user's Documents directory
-            string baseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+            string baseFolderPath = GetBasePath();
 
             // Define weekday folders
             string[] weekdays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Fallback", "Special" };
@@ -91,6 +94,33 @@ namespace Re_DigitalSignage.Utilities
             }
         }
 
+        public string GetMediaFolderPath(string mediaType)
+        {
+            string dayFolder;
+            string baseFolderPath = GetBasePath();
+
+#if DEBUG
+            // In debug mode, always use the Monday folder
+            dayFolder = Path.Combine(baseFolderPath, "Monday");
+#else
+    // In release mode, use the special folder or folder based on the current day
+    dayFolder = useSpecialFolder
+        ? specialFolderPath
+        : Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd")); // e.g., "Monday"
+#endif
+
+            if (!Directory.Exists(dayFolder))
+            {
+                dayFolder = Path.Combine(baseFolderPath, "Fallback"); // Fallback folder
+            }
+
+            if (!Directory.Exists(dayFolder))
+            {
+                throw new InvalidOperationException($"No valid folder found for {mediaType}.");
+            }
+
+            return Path.Combine(dayFolder, mediaType);
+        }
 
         public void CreateAndModifyTxtFile(string folderPath, string fileName)
         {

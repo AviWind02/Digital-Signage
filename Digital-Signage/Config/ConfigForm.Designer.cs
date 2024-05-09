@@ -70,11 +70,11 @@ namespace Digital_Signage.Config
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.buttonPlayPause = new System.Windows.Forms.Button();
             this.button_install = new System.Windows.Forms.Button();
             this.Tag = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.label11 = new System.Windows.Forms.Label();
-            this.buttonPlayPause = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -493,6 +493,16 @@ namespace Digital_Signage.Config
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Misc";
             // 
+            // buttonPlayPause
+            // 
+            this.buttonPlayPause.Enabled = false;
+            this.buttonPlayPause.Location = new System.Drawing.Point(226, 18);
+            this.buttonPlayPause.Name = "buttonPlayPause";
+            this.buttonPlayPause.Size = new System.Drawing.Size(39, 35);
+            this.buttonPlayPause.TabIndex = 42;
+            this.buttonPlayPause.Text = "Play";
+            this.buttonPlayPause.UseVisualStyleBackColor = true;
+            // 
             // button_install
             // 
             this.button_install.Location = new System.Drawing.Point(7, 38);
@@ -522,16 +532,6 @@ namespace Digital_Signage.Config
             this.label11.Size = new System.Drawing.Size(204, 13);
             this.label11.TabIndex = 0;
             this.label11.Text = "HotKey To Open/Close Config: CTRL + X";
-            // 
-            // buttonPlayPause
-            // 
-            this.buttonPlayPause.Enabled = false;
-            this.buttonPlayPause.Location = new System.Drawing.Point(226, 18);
-            this.buttonPlayPause.Name = "buttonPlayPause";
-            this.buttonPlayPause.Size = new System.Drawing.Size(39, 35);
-            this.buttonPlayPause.TabIndex = 42;
-            this.buttonPlayPause.Text = "Play";
-            this.buttonPlayPause.UseVisualStyleBackColor = true;
             // 
             // ConfigForm
             // 

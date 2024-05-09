@@ -15,7 +15,10 @@ namespace Re_DigitalSignage.Utilities
             originalOut = Console.Out;  // Preserve the original StreamWriter
             fileWriter = new StreamWriter(path, true, Encoding.UTF8) { AutoFlush = true };
         }
+        public DualWriter()
+        {
 
+        }
         public override Encoding Encoding => Encoding.UTF8;
 
         public override void Write(char value)
@@ -87,6 +90,16 @@ namespace Re_DigitalSignage.Utilities
             }
 
             Console.SetOut(new DualWriter(fullPath));
+        }
+
+        //Used for logging media output
+        public void LogSection(string sectionName, List<string> items)
+        {
+            Console.WriteLine($"\n{sectionName}:\n{new string('-', sectionName.Length)}");
+            foreach (var item in items)
+            {
+                Console.WriteLine($"  - {item}");
+            }
         }
     }
 }

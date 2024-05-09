@@ -20,6 +20,13 @@ namespace Re_DigitalSignage.Utilities
         private int _maxPptPlaybackCount = 10; // Set this to the count after which the media type should switch.
         private int _maxVideoPlaybackCount = 5; // Set this to the count after which the media type should switch.
 
+        private string[][] _powerPointFiles;
+
+        public string[][] PowerPointFiles
+        {
+            get { return _powerPointFiles; }
+            set { _powerPointFiles = value; }
+        }
 
         public int PptPlaybackCounter
         {
