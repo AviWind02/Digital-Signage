@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DigitalSignage"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="1080" Width="1920"
+        Loaded="MainWindow_Loaded">
     <Grid>
-        
+        <Image x:Name="imageControl" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <MediaElement x:Name="mediaElement" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual"/>
+
+        <!-- Scroll Box for News Ticker -->
+        <Canvas VerticalAlignment="Top" Height="110" Margin="0,954,0,0">
+            <TextBlock x:Name="scrollingText" Text="Your scrolling text here" FontSize="24" Foreground="Black">
+                <TextBlock.RenderTransform>
+                    <TranslateTransform/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Canvas>
+        <Label Content="This is not the final product; this is an alpha test for the slides." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48"/>
     </Grid>
 </Window>
