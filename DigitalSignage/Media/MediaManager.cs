@@ -82,6 +82,7 @@ namespace DigitalSignage.Media
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in Loading Media: {ex.Message}");
+                return;
             }
         }
 

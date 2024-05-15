@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DigitalSignage.Windows;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -23,12 +24,16 @@ namespace DigitalSignage
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FormStartWindow formStartWindow;
+
         public MainWindow()
         {
             InitializeComponent();
+            formStartWindow = new FormStartWindow();
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            formStartWindow.Show();
             Trace.WriteLine("Loaded");
             UpdateScrollingText("This is not the final product; this is an alpha test for the slides.");
 

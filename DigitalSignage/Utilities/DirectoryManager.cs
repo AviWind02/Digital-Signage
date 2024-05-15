@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DigitalSignage.Utilities
 {
@@ -14,9 +15,9 @@ namespace DigitalSignage.Utilities
         {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
         }
+
         public void OpenDirectory()
         {
-
             string baseFolderPath = GetBasePath();
 
             // Check if the directory exists
@@ -36,12 +37,10 @@ namespace DigitalSignage.Utilities
                     Verb = "open"
                 });
                 Console.WriteLine("Directory opened: " + baseFolderPath);
-                return;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to open the directory: " + ex.Message);
-                return;
             }
         }
 
@@ -88,6 +87,9 @@ namespace DigitalSignage.Utilities
                 }
 
                 Console.WriteLine("All folders for each weekday created successfully.");
+                Console.WriteLine("Opening Directory - Place files here.");
+
+                OpenDirectory();
             }
             catch (Exception ex)
             {
@@ -104,10 +106,10 @@ namespace DigitalSignage.Utilities
             // In debug mode, always use the Monday folder
             dayFolder = Path.Combine(baseFolderPath, "Monday");
 #else
-    // In release mode, use the special folder or folder based on the current day
-    dayFolder = useSpecialFolder
-        ? specialFolderPath
-        : Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd")); // e.g., "Monday"
+            // In release mode, use the special folder or folder based on the current day
+            dayFolder = useSpecialFolder
+                ? specialFolderPath
+                : Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd")); // e.g., "Monday"
 #endif
 
             if (!Directory.Exists(dayFolder))
@@ -125,11 +127,7 @@ namespace DigitalSignage.Utilities
 
         public void CreateAndModifyTxtFile(string folderPath, string fileName)
         {
-            //// Ensure the folder path ends with a backslash
-            //if (!folderPath.EndsWith(@"\"))
-            //    folderPath += @"\";
-
-            string filePath = folderPath + fileName + ".txt";
+            string filePath = Path.Combine(folderPath, fileName + ".txt");
 
             try
             {
@@ -155,12 +153,44 @@ namespace DigitalSignage.Utilities
                 }
 
                 // Open the file in the default text editor
-                System.Diagnostics.Process.Start(filePath);
+                Process.Start(filePath);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
+        }
+
+        public bool CheckMediaFolders()
+        {
+            string baseFolderPath = GetBasePath();
+
+            // Define weekday folders
+            string[] weekdays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Fallback", "Special" };
+
+            // Define subfolders for each weekday
+            string[] subFolders = { "Images", "Level Images", "PowerPoint", "PowerPoint\\PowerPointImages", "Videos" };
+
+            // Check if any files are present in the media folders
+            foreach (string day in weekdays)
+            {
+                foreach (string subFolder in subFolders)
+                {
+                    string folderPath = Path.Combine(baseFolderPath, day, subFolder);
+                    if (Directory.Exists(folderPath))
+                    {
+                        if (Directory.EnumerateFiles(folderPath).Any())
+                        {
+                            return true; // Found files in at least one folder
+                        }
+                    }
+                }
+            }
+
+            // No files found in any of the folders
+            Console.WriteLine("No media files found in any of the folders.");
+            MessageBox.Show("No media files found in any of the folder. Initialize again when media is added.");
+            return false;
         }
     }
 }

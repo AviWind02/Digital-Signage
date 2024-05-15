@@ -29,6 +29,7 @@ namespace DigitalSignage.Utilities
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating registry key: {ex.Message}");
+                return;
             }
         }
 

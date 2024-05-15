@@ -68,7 +68,6 @@ namespace Digital_Signage.Config
             textBoxPowerPointRate.Text = registryConfigManager.ReadRegistryValue("PowerPointChance").ToString();
             textBoxVideoRate.Text = registryConfigManager.ReadRegistryValue("VideoChance").ToString();
             textBoxImageRate.Text = registryConfigManager.ReadRegistryValue("ImageChance").ToString();
-
             textBoxSlideDelay.Text = registryConfigManager.ReadRegistryValue("Slide Delay").ToString();
             textBoxCounterPerPPT.Text = registryConfigManager.ReadRegistryValue("MaxPlaybackCountVideo").ToString();
             textBoxCounterPerVideo.Text = registryConfigManager.ReadRegistryValue("MaxPlaybackCountVideo").ToString();
