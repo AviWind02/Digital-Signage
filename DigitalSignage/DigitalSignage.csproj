@@ -86,6 +86,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Windows\FormSettingWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\FormSettingWindow.Designer.cs">
+      <DependentUpon>FormSettingWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FormStartWindow.cs">
       <SubType>Form</SubType>
     </Compile>

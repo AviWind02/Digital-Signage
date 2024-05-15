@@ -235,7 +235,7 @@ namespace DigitalSignage
                 if ((GlobalVariables.VideoPlaybackCounter >= GlobalVariables.MaxVideoPlaybackCount))
                 {
                     canSwitchMediaTypeToVideo = true;
-                    GlobalVariables.MaxVideoPlaybackCount = 0;
+                    GlobalVariables.VideoPlaybackCounter = 0;
                     Console.WriteLine("Reached maximum playback count. Ready to switch media type to Video.");
                 }
 
@@ -293,6 +293,7 @@ namespace DigitalSignage
 
         private void StartCountDownDelay()
         {
+            GlobalVariables.DelayPerSlide = 5;
             Console.WriteLine($"Starting countdown for {GlobalVariables.DelayPerSlide} seconds...");
             mainTimer.Stop();
             delayTimer.Start();
@@ -311,6 +312,7 @@ namespace DigitalSignage
             }
         }
 
+
         private bool ShouldPlayVideo()
         {
             Random random = new Random();
@@ -320,9 +322,7 @@ namespace DigitalSignage
         {
 
             Random random = new Random();
-            if (!canSwitchMediaTypeToPPT)
-                return random.Next(100) < GlobalVariables.PowerpointChance;
-            return false;
+            return random.Next(100) < GlobalVariables.PowerpointChance;
         }
 
 
@@ -339,11 +339,10 @@ namespace DigitalSignage
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             isVideoPlaying = false;
-            TimerTick(null, null);
+            //TimerTick(null, null);
         }
         private int GetRandomIndex(List<string> mediaList)
         {
-            Console.WriteLine($"{mediaList.Count} media");
             Random random = new Random();
             int index;
             do

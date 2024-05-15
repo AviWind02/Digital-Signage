@@ -102,13 +102,8 @@ namespace DigitalSignage.Utilities
             string dayFolder;
             string baseFolderPath = GetBasePath();
 
-#if DEBUG
-            // In debug mode, always use the Monday folder
-            dayFolder = Path.Combine(baseFolderPath, "Monday");
-#else
-            // In release mode, use the special folder or folder based on the current day
             dayFolder = Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd")); // e.g., "Monday"
-#endif
+
 
             if (!Directory.Exists(dayFolder))
             {
