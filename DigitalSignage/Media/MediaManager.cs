@@ -9,16 +9,14 @@ namespace DigitalSignage.Media
     internal class MediaManager
     {
         private PowerPointExtractor powerPointExtractor;
-        private MediaCollection mediaCollection;
-        private GlobalVariables globalVariables;
+        private MediaCollection MediaCollection;
         private DirectoryManager directoryManager;
         private DualWriter dualWriter;
 
         public MediaManager()
         {
             powerPointExtractor = new PowerPointExtractor();
-            mediaCollection = new MediaCollection();
-            globalVariables = new GlobalVariables();
+            MediaCollection = new MediaCollection();
             directoryManager = new DirectoryManager();
             dualWriter = new DualWriter();
         }
@@ -49,20 +47,20 @@ namespace DigitalSignage.Media
                 string videosFolderPath = directoryManager.GetMediaFolderPath("Videos");
 
                 //Retrieve and process media based on the paths provided by pathManager
-                GetMediaFromFolder(imagesFolderPath, mediaCollection.Images);
-                GetMediaFromFolder(levelImagesFolderPath, mediaCollection.ImageLevels);
-                GetMediaFromFolder(powerpointImagesFolderPath, mediaCollection.PowerpointImages);
+                GetMediaFromFolder(imagesFolderPath, MediaCollection.Images);
+                GetMediaFromFolder(levelImagesFolderPath, MediaCollection.ImageLevels);
+                GetMediaFromFolder(powerpointImagesFolderPath, MediaCollection.PowerpointImages);
                 powerPointExtractor.ExtractPowerPointSlides(powerpointFolderPath, powerpointImagesFolderPath);
-                GetMediaFromFolder(videosFolderPath, mediaCollection.Videos);
+                GetMediaFromFolder(videosFolderPath, MediaCollection.Videos);
 
                 //Create and store PowerPoint files in 2D array
                 PowerPointManager powerPointManager = new PowerPointManager();
-                globalVariables.PowerPointFiles = powerPointManager.StorePowerPointFiles(powerpointImagesFolderPath);
+                GlobalVariables.PowerPointFiles = powerPointManager.StorePowerPointFiles(powerpointImagesFolderPath);
 
                 //Log loaded PPT files for verification
                 string horizontalRule = new string('-', 50);
                 Console.WriteLine($"{horizontalRule}\nLoaded PPT in Array:\n{horizontalRule}");
-                foreach (var folder in globalVariables.PowerPointFiles)
+                foreach (var folder in GlobalVariables.PowerPointFiles)
                 {
                     Console.WriteLine("Folder: " + folder[0]);
                     for (int i = 1; i < folder.Length; i++)
@@ -73,9 +71,9 @@ namespace DigitalSignage.Media
 
                 //Display loaded media paths in console
                 Console.WriteLine($"{horizontalRule}\nLoaded Media:\n{horizontalRule}");
-                dualWriter.LogSection("Images", mediaCollection.Images);
-                dualWriter.LogSection("Image Levels", mediaCollection.ImageLevels);
-                dualWriter.LogSection("Videos", mediaCollection.Videos);
+                dualWriter.LogSection("Images", MediaCollection.Images);
+                dualWriter.LogSection("Image Levels", MediaCollection.ImageLevels);
+                dualWriter.LogSection("Videos", MediaCollection.Videos);
 
                 Console.WriteLine("Files Loaded.");
             }

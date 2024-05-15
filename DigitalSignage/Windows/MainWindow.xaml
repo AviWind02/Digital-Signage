@@ -9,7 +9,7 @@
         Loaded="MainWindow_Loaded">
     <Grid>
         <Image x:Name="imageControl" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <MediaElement x:Name="mediaElement" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual"/>
+        <MediaElement x:Name="mediaElement" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual" MediaEnded="MediaElement_MediaEnded"/>
 
         <!-- Scroll Box for News Ticker -->
         <Canvas VerticalAlignment="Top" Height="110" Margin="0,954,0,0">

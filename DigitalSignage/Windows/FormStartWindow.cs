@@ -15,25 +15,32 @@ namespace DigitalSignage.Windows
 {
     public partial class FormStartWindow : Form
     {
-        private DirectoryManager directoryManager;
-        private MediaManager mediaManager;
-        private DualWriter dualWriter;
         private RegistrationManager registrationManager;
+        private DirectoryManager directoryManager;
+        private Configuration configuration;
+        private MediaManager mediaManager;
+        private MainWindow mediaWindow;
+        private DualWriter dualWriter;
 
         private bool isnitialize;
 
-        public FormStartWindow()
+        public FormStartWindow(MainWindow _mediaWindow)
         {
             InitializeComponent();
+            mediaWindow = _mediaWindow; // Store the reference to MainWindow
+
             AllocConsole();
+
+            registrationManager = new RegistrationManager();
             directoryManager = new DirectoryManager();
+            configuration = new Configuration();
             mediaManager = new MediaManager();
             dualWriter = new DualWriter();
-            registrationManager = new RegistrationManager();
         }
 
         private void FormStartWindow_Load(object sender, EventArgs e)
         {
+            mediaWindow.Hide();
             dualWriter.StartLogging();
             buttonStart.Enabled = isnitialize;
         }
@@ -61,7 +68,23 @@ namespace DigitalSignage.Windows
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            // Code for the Start button click event
+            // Check if media files are available before starting playback
+            if (!directoryManager.CheckMediaFolders())
+            {
+                MessageBox.Show("No media files found in any of the folders. Please add media files before starting.", "Aether Corp", MessageBoxButtons.OK);
+                return; // Exit if no media files are found
+            }
+
+            if (GlobalVariables.PlayMedia)
+            {
+                StopMediaPlayback();
+            }
+            else
+            {
+                StartMediaPlayback();
+            }
+
+            UpdateButtonText();
         }
 
         private void buttonSettings_Click(object sender, EventArgs e)
@@ -78,6 +101,36 @@ namespace DigitalSignage.Windows
         {
             DialogResult dialogResult = MessageBox.Show("Have you placed media into the folder?", "Aether Corp", MessageBoxButtons.YesNo);
             return dialogResult == DialogResult.Yes;
+        }
+
+        // Method to handle media playback logic
+        private void StartMediaPlayback()
+        {
+            GlobalVariables.PlayMedia = true;
+            GlobalVariables.StopMedia = false;
+            mediaWindow.Show();
+            Console.WriteLine("Media playback started.");
+            // Add your media playback code here
+        }
+
+        // Method to handle media stop logic
+        private void StopMediaPlayback()
+        {
+            GlobalVariables.PlayMedia = false;
+            GlobalVariables.StopMedia = true;
+            Console.WriteLine("Media playback stopped.");
+            // Add your media stop code here
+        }
+        private void UpdateButtonText()
+        {
+            if (GlobalVariables.PlayMedia)
+            {
+                buttonStart.Text = "Stop";
+            }
+            else
+            {
+                buttonStart.Text = "Play";
+            }
         }
     }
 }

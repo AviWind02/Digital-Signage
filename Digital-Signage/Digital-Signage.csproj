@@ -83,7 +83,7 @@
     <Compile Include="Signage\Classes\Media\MediaCollection.cs" />
     <Compile Include="Signage\Classes\Media\MediaFolderManager.cs" />
     <Compile Include="Signage\Classes\PowerPoint\PowerPointManager.cs" />
-    <Page Include="Signage\Window\MainWindow.xaml">
+    <Page Include="Signage\Window\MediaWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -94,8 +94,8 @@
     <Compile Include="Signage\Classes\Math\NumericStringComparer .cs" />
     <Compile Include="Signage\Classes\PowerPoint\PowerPointExtractor.cs" />
     <Compile Include="Signage\Classes\Scripts\DualWriter .cs" />
-    <Compile Include="Signage\Window\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Signage\Window\MediaWindow.xaml.cs">
+      <DependentUpon>MediaWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

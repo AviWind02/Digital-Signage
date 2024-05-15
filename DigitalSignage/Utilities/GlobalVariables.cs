@@ -6,65 +6,77 @@ using System.Threading.Tasks;
 
 namespace DigitalSignage.Utilities
 {
-    internal class GlobalVariables
+    internal static class GlobalVariables
     {
+        private static bool _playMedia;
+        private static bool _stopMedia;
 
-        private int _pptPlaybackCounter = 0;
-        private int _videoPlaybackCounter = 0;
+        private static int _pptPlaybackCounter = 0;
+        private static int _videoPlaybackCounter = 0;
         
-        private int _powerpointChance = 30;
-        private int _videoChance = 30;
+        private static int _powerpointChance = 30;
+        private static int _videoChance = 30;
         
-        private int _delayPerSlide = 5;
+        private static int _delayPerSlide = 5;
 
-        private int _maxPptPlaybackCount = 10; // Set this to the count after which the media type should switch.
-        private int _maxVideoPlaybackCount = 5; // Set this to the count after which the media type should switch.
+        private static int _maxPptPlaybackCount = 10; // Set this to the count after which the media type should switch.
+        private static int _maxVideoPlaybackCount = 5; // Set this to the count after which the media type should switch.
 
-        private string[][] _powerPointFiles;
+        private static string[][] _powerPointFiles;
 
-        public string[][] PowerPointFiles
+        public static bool StopMedia
+        {
+            get { return _stopMedia; }
+            set { _stopMedia = value; }
+        }
+        public static bool PlayMedia
+        {
+            get { return _playMedia; }
+            set { _playMedia = value; }
+        }
+        public static string[][] PowerPointFiles
         {
             get { return _powerPointFiles; }
             set { _powerPointFiles = value; }
         }
 
-        public int PptPlaybackCounter
+        public static int PptPlaybackCounter
         {
             get { return _pptPlaybackCounter; }
             set { _pptPlaybackCounter = value; }
         }
 
-        public int VideoPlaybackCounter
+        public static int VideoPlaybackCounter
         {
             get { return _videoPlaybackCounter; }
             set { _videoPlaybackCounter = value; }
         }
 
-        public int MaxPptPlaybackCount
+        public static int MaxPptPlaybackCount
         {
             get { return _maxPptPlaybackCount; }
             set { _maxPptPlaybackCount = value; }
         }
 
-        public int MaxVideoPlaybackCount
+        public static int MaxVideoPlaybackCount
         {
             get { return _maxVideoPlaybackCount; }
             set { _maxVideoPlaybackCount = value; }
         }
 
-        public int PowerpointChance
+        public static int PowerpointChance
         {
             get { return _powerpointChance; }
             set { _powerpointChance = value; }
         }
 
-        public int VideoChance
+        public static int VideoChance
         {
             get { return _videoChance; }
             set { _videoChance = value; }
         }
 
-        public int DelayPerSlide
+        public static int DelayPerSlide
         {
             get { return _delayPerSlide; }
             set { _delayPerSlide = value; }

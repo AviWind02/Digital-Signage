@@ -196,5 +196,10 @@ namespace Digital_Signage.Config
         {
             dualWriter.OpenDir();
         }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

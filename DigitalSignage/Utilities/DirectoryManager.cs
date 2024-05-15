@@ -107,9 +107,7 @@ namespace DigitalSignage.Utilities
             dayFolder = Path.Combine(baseFolderPath, "Monday");
 #else
             // In release mode, use the special folder or folder based on the current day
-            dayFolder = useSpecialFolder
-                ? specialFolderPath
-                : Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd")); // e.g., "Monday"
+            dayFolder = Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd")); // e.g., "Monday"
 #endif
 
             if (!Directory.Exists(dayFolder))

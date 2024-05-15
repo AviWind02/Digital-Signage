@@ -14,10 +14,10 @@ namespace DigitalSignage.Media
     internal class MediaCollection
     {
 
-        public List<string> Images { get; set; }
-        public List<string> ImageLevels { get; set; }
-        public List<string> PowerpointImages { get; set; }
-        public List<string> Videos { get; set; }
+        public static List<string> Images { get; set; }
+        public static List<string> ImageLevels { get; set; }
+        public static List<string> PowerpointImages { get; set; }
+        public static List<string> Videos { get; set; }
 
         public MediaCollection()
         {
@@ -30,8 +30,8 @@ namespace DigitalSignage.Media
     }
     internal class MediaCollection_powerpoint
     {
-        public List<string> Powerpoint { get; set; }
-        public List<string> Powerpointsildes { get; set; }
+        public static List<string> Powerpoint { get; set; }
+        public static List<string> Powerpointsildes { get; set; }
 
     }
 }
