@@ -59,15 +59,27 @@ namespace DigitalSignage.Windows
         {
             try
             {
+                void loadfiles()
+                {
+                    mediaManager.LoadFiles();
+                    buttonStart.Enabled = true; // Functions above have a check if something fails it'll return;
+                }
+
                 directoryManager.Run();// Always do this 
                 registrationManager.CreateMainDirectory();// and this too
+
+                if (directoryManager.CheckMediaFolders())//If files are already in just skip the other check
+                {
+                    loadfiles();
+                    return;        
+                }
+            
                 if (!areFilesPlacedInFolder() || !directoryManager.CheckMediaFolders())
                 {
                     return; // Exit if files are not placed in the folder
                 }
 
-                mediaManager.LoadFiles();
-                buttonStart.Enabled = true; // Functions above have a check if something fails it'll return;
+                loadfiles();
             }
             catch (Exception ex)
             {
@@ -99,7 +111,7 @@ namespace DigitalSignage.Windows
 
         private void buttonSettings_Click(object sender, EventArgs e)
         {
-            new FormSettingWindow().Show();
+            mediaWindow.ShowSettingsWindow();
         }
 
         // Console Debug

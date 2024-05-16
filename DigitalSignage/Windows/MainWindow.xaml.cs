@@ -75,6 +75,10 @@ namespace DigitalSignage
 
         }
 
+        public void ShowSettingsWindow()
+        {
+            formSettingWindow.Show();
+        }
 
         private void TimerTick(object sender, EventArgs e)
         {
