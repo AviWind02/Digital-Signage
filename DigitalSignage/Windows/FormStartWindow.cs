@@ -51,28 +51,24 @@ namespace DigitalSignage.Windows
             dualWriter.StartLogging();
             buttonStart.Enabled = isnitialize;
 
-     
+            if (directoryManager.CheckMediaFolders()){//If files are already in just skip the other check
+                loadfiles();
+            }
 
+        }
+        void loadfiles()
+        {
+            mediaManager.LoadFiles();
+            buttonStart.Enabled = true; // Functions above have a check if something fails it'll return;
         }
 
         private void buttonInitialize_Click(object sender, EventArgs e)
         {
             try
             {
-                void loadfiles()
-                {
-                    mediaManager.LoadFiles();
-                    buttonStart.Enabled = true; // Functions above have a check if something fails it'll return;
-                }
-
+             
                 directoryManager.Run();// Always do this 
                 registrationManager.CreateMainDirectory();// and this too
-
-                if (directoryManager.CheckMediaFolders())//If files are already in just skip the other check
-                {
-                    loadfiles();
-                    return;        
-                }
             
                 if (!areFilesPlacedInFolder() || !directoryManager.CheckMediaFolders())
                 {
@@ -111,6 +107,7 @@ namespace DigitalSignage.Windows
 
         private void buttonSettings_Click(object sender, EventArgs e)
         {
+
             mediaWindow.ShowSettingsWindow();
         }
 

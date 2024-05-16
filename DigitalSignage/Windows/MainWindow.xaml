@@ -5,6 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DigitalSignage"
         mc:Ignorable="d"
+        WindowStyle="None" 
+        ResizeMode="NoResize"
+        WindowState="Maximized"
         Title="MainWindow" Height="1080" Width="1920"
         Loaded="MainWindow_Loaded">
     <Grid>
