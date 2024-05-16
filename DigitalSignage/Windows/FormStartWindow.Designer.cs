@@ -96,8 +96,12 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.buttonInitialize);
+            this.MinimizeBox = false;
             this.Name = "FormStartWindow";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DigitalSignage";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.FormStartWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

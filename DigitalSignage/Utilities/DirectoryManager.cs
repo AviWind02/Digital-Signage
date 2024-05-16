@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,7 +16,7 @@ namespace DigitalSignage.Utilities
         {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
         }
-
+   
         public void OpenDirectory()
         {
             string baseFolderPath = GetBasePath();
@@ -118,7 +119,7 @@ namespace DigitalSignage.Utilities
             return Path.Combine(dayFolder, mediaType);
         }
 
-        public void CreateAndModifyTxtFile(string folderPath, string fileName)
+        public void CreateAndModifyTxtFile(string folderPath, string fileName = "FooterText")
         {
             string filePath = Path.Combine(folderPath, fileName + ".txt");
 
@@ -184,6 +185,40 @@ namespace DigitalSignage.Utilities
             Console.WriteLine("No media files found in any of the folders.");
             MessageBox.Show("No media files found in any of the folder. Initialize again when media is added.");
             return false;
+        }
+
+        public string ReadTxtFileWithLogging(string folderPath, string fileName = "FooterText")
+        {
+            string filePath = Path.Combine(folderPath, fileName + ".txt");
+
+            try
+            {
+                // Check if the folder exists
+                if (!Directory.Exists(folderPath))
+                {
+                    return "The specified folder does not exist: " + folderPath;
+
+                }
+
+                // Check if the file exists
+                if (!File.Exists(filePath))
+                {
+                    return "The specified file does not exist: " + filePath;
+                }
+
+                // Read the file content
+                string fileContent = File.ReadAllText(filePath);
+                Console.WriteLine("File content read successfully:");
+                return fileContent;
+
+              
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"An error occurred while reading the file: {ex.Message}";
+                Console.WriteLine(errorMessage);
+                return errorMessage;
+            }
         }
     }
 }

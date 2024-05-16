@@ -23,10 +23,12 @@ namespace DigitalSignage
     public partial class MainWindow : Window
     {
         private FormStartWindow formStartWindow;
+        private FormSettingWindow formSettingWindow;
+        
         private DispatcherTimer mainTimer;
         private DispatcherTimer delayTimer;
-
         private MediaCollection MediaCollection;
+        private DirectoryManager directoryManager;
 
         private bool isVideoPlaying = false; 
         private bool isSlidePlaying = false;
@@ -42,15 +44,20 @@ namespace DigitalSignage
         public MainWindow()
         {
             InitializeComponent();
-         
-            formStartWindow = new FormStartWindow(this);
-            MediaCollection = new MediaCollection();
+  
 
 
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            formStartWindow = new FormStartWindow(this);
+            formSettingWindow = new FormSettingWindow(this);
+
+
+            directoryManager = new DirectoryManager();
+            MediaCollection = new MediaCollection();
+
             formStartWindow.Show();
             Trace.WriteLine("Loaded");
 
@@ -63,7 +70,8 @@ namespace DigitalSignage
             delayTimer.Interval = TimeSpan.FromSeconds(1);
             delayTimer.Tick += DelayTimerTick;
 
-            UpdateScrollingText("This is not the final product; this is an alpha test for the slides.");
+            StartScrollingTextAnimation();
+            UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(directoryManager.GetBasePath()));
 
         }
 
@@ -353,11 +361,10 @@ namespace DigitalSignage
         }
 
 
-        private void UpdateScrollingText(string newText)
+        public void UpdateScrollingText(string newText)
         {
             //Update the text
             scrollingText.Text = newText;
-            StartScrollingTextAnimation();
 
         }
 

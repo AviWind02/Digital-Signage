@@ -31,18 +31,28 @@ namespace DigitalSignage.Windows
 
             AllocConsole();
 
+ 
+
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+        }
+
+        private void FormStartWindow_Load(object sender, EventArgs e)
+        {
+
             registrationManager = new RegistrationManager();
             directoryManager = new DirectoryManager();
             configuration = new Configuration();
             mediaManager = new MediaManager();
             dualWriter = new DualWriter();
-        }
 
-        private void FormStartWindow_Load(object sender, EventArgs e)
-        {
+
             mediaWindow.Hide();
             dualWriter.StartLogging();
             buttonStart.Enabled = isnitialize;
+
+     
+
         }
 
         private void buttonInitialize_Click(object sender, EventArgs e)
@@ -89,7 +99,7 @@ namespace DigitalSignage.Windows
 
         private void buttonSettings_Click(object sender, EventArgs e)
         {
-            // Code for the Settings button click event
+            new FormSettingWindow().Show();
         }
 
         // Console Debug

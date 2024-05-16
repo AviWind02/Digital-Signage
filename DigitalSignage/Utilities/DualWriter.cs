@@ -49,7 +49,7 @@ namespace DigitalSignage.Utilities
                 fileWriter.Dispose();
             }
         }
-        public void OpenDir()
+        public void OpenDirectory()
         {
 
             string baseFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log files Signage");

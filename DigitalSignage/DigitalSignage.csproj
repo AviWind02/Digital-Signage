@@ -121,6 +121,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\FormSettingWindow.resx">
+      <DependentUpon>FormSettingWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\FormStartWindow.resx">
       <DependentUpon>FormStartWindow.cs</DependentUpon>
     </EmbeddedResource>
