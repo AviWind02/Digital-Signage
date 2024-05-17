@@ -135,7 +135,7 @@ namespace DigitalSignage.Windows
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
         private void buttonSaveValues_Click(object sender, EventArgs e)
