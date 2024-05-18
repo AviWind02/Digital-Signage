@@ -27,6 +27,7 @@ namespace DigitalSignage.Windows
             mediaWindow = _mediaWindow;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
+            this.ControlBox = false;
 
         }
 

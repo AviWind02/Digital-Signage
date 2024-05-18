@@ -266,7 +266,15 @@ namespace DigitalSignage
             try
             {
                 ToggleVisibility(true);
-                imageControl.Source = new BitmapImage(new Uri(imagePath));
+                // Ensure the image is loaded with high quality
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(imagePath);
+                bitmap.DecodePixelWidth = (int)SystemParameters.PrimaryScreenWidth; // Set decode width to screen width
+                bitmap.DecodePixelHeight = (int)SystemParameters.PrimaryScreenHeight; // Set decode height to screen height
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                imageControl.Source = bitmap;
                 //Console.WriteLine($"Image source set to: {imagePath}");
             }
             catch (Exception ex)
