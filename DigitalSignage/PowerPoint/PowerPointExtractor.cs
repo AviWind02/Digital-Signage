@@ -56,7 +56,7 @@ namespace DigitalSignage.PowerPoint
                         }
 
                         // Save the slide as an image
-                        slide.Export(slideImagePath, "PNG", ScaleWidth: 1024, ScaleHeight: 768);
+                        slide.Export(slideImagePath, "PNG", ScaleWidth: 1920, ScaleHeight: 1080);
                         Console.WriteLine($"  - Slide {i} extracted and saved as: {slideImagePath}");
                     }
 
