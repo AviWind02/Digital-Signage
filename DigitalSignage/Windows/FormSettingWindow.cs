@@ -15,8 +15,11 @@ namespace DigitalSignage.Windows
     public partial class FormSettingWindow : Form
     {
 
+        private bool readyToChange;
+
         private RegistrationManager registrationManager;
         private DirectoryManager directoryManager;
+        private LevelConverter levelConverter;
         private Configuration configuration;
         private MainWindow mediaWindow;
         private DualWriter dualwriter;
@@ -33,22 +36,29 @@ namespace DigitalSignage.Windows
 
         private void FormSettingWindow_Load(object sender, EventArgs e)
         {
-            InitComobBox();
 
 
 
 
             registrationManager = new RegistrationManager();
             directoryManager = new DirectoryManager();
+            levelConverter = new LevelConverter();
             configuration = new Configuration();
             dualwriter = new DualWriter();
 
 
+
             textBoxPowerPointRate.Text = registrationManager.ReadRegistryValue("PowerPointChance").ToString();
             textBoxVideoRate.Text = registrationManager.ReadRegistryValue("VideoChance").ToString();
+            textBoxVideoRate.Text = registrationManager.ReadRegistryValue("ImageChance").ToString();
             textBoxSlideDelay.Text = registrationManager.ReadRegistryValue("Slide Delay").ToString();
+
             textBoxCounterPerPPT.Text = registrationManager.ReadRegistryValue("MaxPlaybackCountVideo").ToString();
             textBoxCounterPerVideo.Text = registrationManager.ReadRegistryValue("MaxPlaybackCountVideo").ToString();
+
+
+            InitComobBox();
+
         }
 
 
@@ -91,6 +101,12 @@ namespace DigitalSignage.Windows
             textSpeedComboBox.Items.Add("Normal");
             textSpeedComboBox.Items.Add("Slow");
             textSpeedComboBox.Items.Add("Custom");
+            Console.WriteLine($"GlobalVariables.VideoChance = {GlobalVariables.VideoChance}");
+            Console.WriteLine($"levelConverter.GetChanceLevel(GlobalVariables.VideoChance) = {levelConverter.GetChanceLevel(GlobalVariables.VideoChance)}");
+            comboBoxVideoRate.SelectedIndex = levelConverter.GetChanceLevel(GlobalVariables.VideoChance);
+            comboBoxPPTRate.SelectedIndex = levelConverter.GetChanceLevel(GlobalVariables.PowerpointChance);
+            comboBoxDelay.SelectedIndex = levelConverter.GetSpeedLevel(GlobalVariables.DelayPerSlide);
+
         }
 
         private void textSpeedComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -112,12 +128,12 @@ namespace DigitalSignage.Windows
         }
         private void textBoxPowerPointRate_TextChanged(object sender, EventArgs e)
         {
-            CalculateImageRate();
+            //CalculateImageRate();
         }
 
         private void textBoxVideoRate_TextChanged(object sender, EventArgs e)
         {
-            CalculateImageRate();
+            //CalculateImageRate();
         }
 
         private void buttonOpenTxtFile_Click(object sender, EventArgs e)
@@ -151,6 +167,9 @@ namespace DigitalSignage.Windows
             configuration.SaveConfiguration();
 
         }
+        
+
+
 
         private void buttonLoadValues_Click(object sender, EventArgs e)// Just in case load fails
         {
@@ -165,6 +184,33 @@ namespace DigitalSignage.Windows
         private void buttonSetFooterText_Click(object sender, EventArgs e)
         {
             mediaWindow.UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(directoryManager.GetBasePath()));
+
+        }
+
+        private void comboBoxPPTRate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            int value = levelConverter.GetChanceValue(comboBoxPPTRate.Text);
+            GlobalVariables.PowerpointChance = Convert.ToInt32(value);
+            textBoxPowerPointRate.Text = Convert.ToString(value);
+            Console.WriteLine("PowerPoint rate adjusted(%): " + value);
+
+        }
+
+        private void comboBoxVideoRate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int value = levelConverter.GetChanceValue(comboBoxVideoRate.Text);
+            GlobalVariables.VideoChance = Convert.ToInt32(value);
+            textBoxVideoRate.Text = Convert.ToString(value);
+            Console.WriteLine("Video rate adjusted(%): " + value);
+        }
+
+        private void comboBoxDelay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            double multiplier = levelConverter.GetSpeedMultiplier(comboBoxDelay.Text);
+            GlobalVariables.DelayPerSlide = Convert.ToInt32(multiplier);
+            textBoxSlideDelay.Text = Convert.ToString(multiplier);// This for the reg backend I was already doing this before so might as well just keep it
+            Console.WriteLine("Slide Delay adjusted(Seconds): " + multiplier);
 
         }
     }

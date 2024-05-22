@@ -77,6 +77,7 @@
     <Compile Include="Utilities\DirectoryManager.cs" />
     <Compile Include="Utilities\DualWriter.cs" />
     <Compile Include="Utilities\GlobalVariables.cs" />
+    <Compile Include="Utilities\LevelConverter.cs" />
     <Compile Include="Utilities\RegistrationManager.cs" />
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -43,21 +43,23 @@ namespace DigitalSignage.Windows
             this.button4 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.comboBoxDelay = new System.Windows.Forms.ComboBox();
+            this.comboBoxVideoRate = new System.Windows.Forms.ComboBox();
+            this.comboBoxPPTRate = new System.Windows.Forms.ComboBox();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonSaveValues = new System.Windows.Forms.Button();
             this.buttonLoadValues = new System.Windows.Forms.Button();
-            this.textBoxPowerPointRate = new System.Windows.Forms.TextBox();
             this.textBoxCounterPerVideo = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.textBoxCounterPerPPT = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBoxPowerPointRate = new System.Windows.Forms.TextBox();
             this.textBoxSlideDelay = new System.Windows.Forms.TextBox();
             this.textBoxImageRate = new System.Windows.Forms.TextBox();
             this.textBoxVideoRate = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttonOpenLogs = new System.Windows.Forms.Button();
             this.buttonSaveLogs = new System.Windows.Forms.Button();
@@ -189,27 +191,64 @@ namespace DigitalSignage.Windows
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.comboBoxDelay);
+            this.groupBox3.Controls.Add(this.comboBoxVideoRate);
+            this.groupBox3.Controls.Add(this.comboBoxPPTRate);
             this.groupBox3.Controls.Add(this.buttonReset);
             this.groupBox3.Controls.Add(this.buttonSaveValues);
             this.groupBox3.Controls.Add(this.buttonLoadValues);
-            this.groupBox3.Controls.Add(this.textBoxPowerPointRate);
             this.groupBox3.Controls.Add(this.textBoxCounterPerVideo);
-            this.groupBox3.Controls.Add(this.textBoxCounterPerPPT);
-            this.groupBox3.Controls.Add(this.textBoxSlideDelay);
-            this.groupBox3.Controls.Add(this.textBoxImageRate);
-            this.groupBox3.Controls.Add(this.textBoxVideoRate);
-            this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.textBoxCounterPerPPT);
+            this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Location = new System.Drawing.Point(12, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(271, 150);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Slide Change Config";
+            // 
+            // comboBoxDelay
+            // 
+            this.comboBoxDelay.FormattingEnabled = true;
+            this.comboBoxDelay.Items.AddRange(new object[] {
+            "Fast - x2.5",
+            "Normal - x5",
+            "Slow - x10"});
+            this.comboBoxDelay.Location = new System.Drawing.Point(66, 70);
+            this.comboBoxDelay.Name = "comboBoxDelay";
+            this.comboBoxDelay.Size = new System.Drawing.Size(76, 21);
+            this.comboBoxDelay.TabIndex = 45;
+            this.comboBoxDelay.SelectedIndexChanged += new System.EventHandler(this.comboBoxDelay_SelectedIndexChanged);
+            // 
+            // comboBoxVideoRate
+            // 
+            this.comboBoxVideoRate.FormattingEnabled = true;
+            this.comboBoxVideoRate.Items.AddRange(new object[] {
+            "High",
+            "Moderate",
+            "Low"});
+            this.comboBoxVideoRate.Location = new System.Drawing.Point(70, 44);
+            this.comboBoxVideoRate.Name = "comboBoxVideoRate";
+            this.comboBoxVideoRate.Size = new System.Drawing.Size(72, 21);
+            this.comboBoxVideoRate.TabIndex = 43;
+            this.comboBoxVideoRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxVideoRate_SelectedIndexChanged);
+            // 
+            // comboBoxPPTRate
+            // 
+            this.comboBoxPPTRate.FormattingEnabled = true;
+            this.comboBoxPPTRate.Items.AddRange(new object[] {
+            "High",
+            "Moderate",
+            "Low"});
+            this.comboBoxPPTRate.Location = new System.Drawing.Point(66, 17);
+            this.comboBoxPPTRate.Name = "comboBoxPPTRate";
+            this.comboBoxPPTRate.Size = new System.Drawing.Size(76, 21);
+            this.comboBoxPPTRate.TabIndex = 42;
+            this.comboBoxPPTRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxPPTRate_SelectedIndexChanged);
             // 
             // buttonReset
             // 
@@ -244,109 +283,104 @@ namespace DigitalSignage.Windows
             this.buttonLoadValues.UseVisualStyleBackColor = true;
             this.buttonLoadValues.Click += new System.EventHandler(this.buttonLoadValues_Click);
             // 
-            // textBoxPowerPointRate
-            // 
-            this.textBoxPowerPointRate.Location = new System.Drawing.Point(70, 19);
-            this.textBoxPowerPointRate.Name = "textBoxPowerPointRate";
-            this.textBoxPowerPointRate.Size = new System.Drawing.Size(36, 20);
-            this.textBoxPowerPointRate.TabIndex = 34;
-            this.toolTip2.SetToolTip(this.textBoxPowerPointRate, "This box is editable and shows the probability that a PowerPoint will appear.");
-            this.textBoxPowerPointRate.TextChanged += new System.EventHandler(this.textBoxPowerPointRate_TextChanged);
-            // 
             // textBoxCounterPerVideo
             // 
-            this.textBoxCounterPerVideo.Location = new System.Drawing.Point(186, 41);
+            this.textBoxCounterPerVideo.Location = new System.Drawing.Point(222, 35);
             this.textBoxCounterPerVideo.Name = "textBoxCounterPerVideo";
             this.textBoxCounterPerVideo.Size = new System.Drawing.Size(36, 20);
             this.textBoxCounterPerVideo.TabIndex = 33;
             // 
-            // textBoxCounterPerPPT
-            // 
-            this.textBoxCounterPerPPT.Location = new System.Drawing.Point(186, 19);
-            this.textBoxCounterPerPPT.Name = "textBoxCounterPerPPT";
-            this.textBoxCounterPerPPT.Size = new System.Drawing.Size(36, 20);
-            this.textBoxCounterPerPPT.TabIndex = 32;
-            // 
-            // textBoxSlideDelay
-            // 
-            this.textBoxSlideDelay.Location = new System.Drawing.Point(70, 97);
-            this.textBoxSlideDelay.Name = "textBoxSlideDelay";
-            this.textBoxSlideDelay.Size = new System.Drawing.Size(36, 20);
-            this.textBoxSlideDelay.TabIndex = 31;
-            this.toolTip2.SetToolTip(this.textBoxSlideDelay, "This is the delay between each slide in seconds.");
-            // 
-            // textBoxImageRate
-            // 
-            this.textBoxImageRate.Location = new System.Drawing.Point(70, 71);
-            this.textBoxImageRate.Name = "textBoxImageRate";
-            this.textBoxImageRate.ReadOnly = true;
-            this.textBoxImageRate.Size = new System.Drawing.Size(36, 20);
-            this.textBoxImageRate.TabIndex = 30;
-            this.toolTip2.SetToolTip(this.textBoxImageRate, "This box is not editable, and the chance is based on the power and video rate.");
-            // 
-            // textBoxVideoRate
-            // 
-            this.textBoxVideoRate.Location = new System.Drawing.Point(70, 45);
-            this.textBoxVideoRate.Name = "textBoxVideoRate";
-            this.textBoxVideoRate.Size = new System.Drawing.Size(36, 20);
-            this.textBoxVideoRate.TabIndex = 29;
-            this.toolTip2.SetToolTip(this.textBoxVideoRate, "This box is editable and shows the probability that a Video will appear.");
-            this.textBoxVideoRate.TextChanged += new System.EventHandler(this.textBoxVideoRate_TextChanged);
-            // 
-            // label6
-            // 
-            this.label6.AccessibleDescription = "";
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(112, 48);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(74, 13);
-            this.label6.TabIndex = 28;
-            this.label6.Text = "Counter Video";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(112, 26);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(68, 13);
-            this.label5.TabIndex = 27;
-            this.label5.Text = "Counter PPT";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 104);
+            this.label4.Location = new System.Drawing.Point(4, 78);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 9;
             this.label4.Text = "Slide Delay";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 78);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Image Rate";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 52);
+            this.label2.Location = new System.Drawing.Point(6, 50);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Video Rate";
             // 
+            // textBoxCounterPerPPT
+            // 
+            this.textBoxCounterPerPPT.Location = new System.Drawing.Point(222, 13);
+            this.textBoxCounterPerPPT.Name = "textBoxCounterPerPPT";
+            this.textBoxCounterPerPPT.Size = new System.Drawing.Size(36, 20);
+            this.textBoxCounterPerPPT.TabIndex = 32;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(148, 20);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(68, 13);
+            this.label5.TabIndex = 27;
+            this.label5.Text = "Counter PPT";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 26);
+            this.label1.Location = new System.Drawing.Point(6, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "PPT Rate";
+            // 
+            // label6
+            // 
+            this.label6.AccessibleDescription = "";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(148, 42);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(74, 13);
+            this.label6.TabIndex = 28;
+            this.label6.Text = "Counter Video";
+            // 
+            // textBoxPowerPointRate
+            // 
+            this.textBoxPowerPointRate.Location = new System.Drawing.Point(19, 359);
+            this.textBoxPowerPointRate.Name = "textBoxPowerPointRate";
+            this.textBoxPowerPointRate.Size = new System.Drawing.Size(36, 20);
+            this.textBoxPowerPointRate.TabIndex = 34;
+            this.toolTip2.SetToolTip(this.textBoxPowerPointRate, "This box is editable and shows the probability that a PowerPoint will appear.");
+            this.textBoxPowerPointRate.Visible = false;
+            this.textBoxPowerPointRate.TextChanged += new System.EventHandler(this.textBoxPowerPointRate_TextChanged);
+            // 
+            // textBoxSlideDelay
+            // 
+            this.textBoxSlideDelay.Location = new System.Drawing.Point(19, 437);
+            this.textBoxSlideDelay.Name = "textBoxSlideDelay";
+            this.textBoxSlideDelay.Size = new System.Drawing.Size(36, 20);
+            this.textBoxSlideDelay.TabIndex = 31;
+            this.toolTip2.SetToolTip(this.textBoxSlideDelay, "This is the delay between each slide in seconds.");
+            this.textBoxSlideDelay.Visible = false;
+            // 
+            // textBoxImageRate
+            // 
+            this.textBoxImageRate.Location = new System.Drawing.Point(19, 411);
+            this.textBoxImageRate.Name = "textBoxImageRate";
+            this.textBoxImageRate.ReadOnly = true;
+            this.textBoxImageRate.Size = new System.Drawing.Size(36, 20);
+            this.textBoxImageRate.TabIndex = 30;
+            this.toolTip2.SetToolTip(this.textBoxImageRate, "This box is not editable, and the chance is based on the power and video rate.");
+            this.textBoxImageRate.Visible = false;
+            // 
+            // textBoxVideoRate
+            // 
+            this.textBoxVideoRate.Location = new System.Drawing.Point(19, 385);
+            this.textBoxVideoRate.Name = "textBoxVideoRate";
+            this.textBoxVideoRate.Size = new System.Drawing.Size(36, 20);
+            this.textBoxVideoRate.TabIndex = 29;
+            this.toolTip2.SetToolTip(this.textBoxVideoRate, "This box is editable and shows the probability that a Video will appear.");
+            this.textBoxVideoRate.Visible = false;
+            this.textBoxVideoRate.TextChanged += new System.EventHandler(this.textBoxVideoRate_TextChanged);
             // 
             // groupBox2
             // 
@@ -481,11 +515,15 @@ namespace DigitalSignage.Windows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(520, 304);
+            this.ClientSize = new System.Drawing.Size(518, 304);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.textBoxPowerPointRate);
+            this.Controls.Add(this.textBoxSlideDelay);
             this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.textBoxImageRate);
+            this.Controls.Add(this.textBoxVideoRate);
             this.Controls.Add(this.groupBox3);
             this.Name = "FormSettingWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -500,6 +538,7 @@ namespace DigitalSignage.Windows
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -526,7 +565,6 @@ namespace DigitalSignage.Windows
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -546,5 +584,8 @@ namespace DigitalSignage.Windows
         private Button buttonLoadValues;
         private Button button2;
         private ToolTip toolTip2;
+        private ComboBox comboBoxDelay;
+        private ComboBox comboBoxVideoRate;
+        private ComboBox comboBoxPPTRate;
     }
 }

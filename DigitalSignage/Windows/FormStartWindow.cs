@@ -46,6 +46,7 @@ namespace DigitalSignage.Windows
             mediaManager = new MediaManager();
             dualWriter = new DualWriter();
 
+            configuration.LoadConfiguration();
 
             mediaWindow.Hide();
             dualWriter.StartLogging();
