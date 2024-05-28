@@ -22,7 +22,7 @@ namespace DigitalSignage.Windows
         private MainWindow mediaWindow;
         private DualWriter dualWriter;
 
-        private bool isnitialize;
+        private bool isnitialize;//Avi tf?
 
         public FormStartWindow(MainWindow _mediaWindow)
         {
@@ -50,7 +50,7 @@ namespace DigitalSignage.Windows
 
             mediaWindow.Hide();
             dualWriter.StartLogging();
-            buttonStart.Enabled = isnitialize;
+            buttonStart.Enabled = isnitialize; //Avi tf?
 
             if (directoryManager.CheckMediaFolders()){//If files are already in just skip the other check
                 loadfiles();

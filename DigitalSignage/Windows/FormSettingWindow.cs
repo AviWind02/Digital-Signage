@@ -85,17 +85,13 @@ namespace DigitalSignage.Windows
             }
         }
 
-        private void CustomSpeedScrollBox(bool b)
-        {
-            textBoxCustomTextSpeedScroll.Visible = b;
-            labelCustomTextSpeedScroll.Visible = b;
-        }
+
 
 
         private void InitComobBox()
         {
 
-            CustomSpeedScrollBox(false);
+
             textSpeedComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             textSpeedComboBox.Items.Add("Fast");
             textSpeedComboBox.Items.Add("Normal");
@@ -111,21 +107,11 @@ namespace DigitalSignage.Windows
 
         private void textSpeedComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string speed = textSpeedComboBox.SelectedItem.ToString();
-            if (speed.Equals("Custom"))
-                CustomSpeedScrollBox(true);
-            else
-                CustomSpeedScrollBox(false);
+            //Avi fix this plz thanks babes
+
         }
 
-        private void textBoxCustomTextSpeedScroll_TextChanged(object sender, EventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxCustomTextSpeedScroll.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textBoxCustomTextSpeedScroll.Text = textBoxCustomTextSpeedScroll.Text.Remove(textBoxCustomTextSpeedScroll.Text.Length - 1);
-            }
-        }
+
         private void textBoxPowerPointRate_TextChanged(object sender, EventArgs e)
         {
             //CalculateImageRate();
@@ -183,7 +169,31 @@ namespace DigitalSignage.Windows
 
         private void buttonSetFooterText_Click(object sender, EventArgs e)
         {
-            mediaWindow.UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(directoryManager.GetBasePath()));
+            if(comboBox1.SelectedItem == null)
+            {
+                return;                
+            }
+
+            if(comboBox1.SelectedItem.ToString() == "RED")
+            {
+                mediaWindow.UpdateScrollingText("Today is a RED day! - Please refrain from going outdoors!", "RED");
+            }
+
+            else if (comboBox1.SelectedItem.ToString() == "AMBER")
+            {
+                mediaWindow.UpdateScrollingText("Today is an AMBER day! - Hard surfaces ONLY!", "AMBER");
+            }
+
+            else if (comboBox1.SelectedItem.ToString() == "GREEN")
+            {
+                mediaWindow.UpdateScrollingText("Today is a GREEN day! - Grassy areas are permitted!", "GREEN");
+            }
+
+            else
+            {
+                mediaWindow.UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(directoryManager.GetBasePath()));
+            }         
+
 
         }
 
