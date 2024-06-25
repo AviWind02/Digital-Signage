@@ -65,14 +65,14 @@ namespace DigitalSignage.Windows
             this.buttonSaveLogs = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.buttonOpenTxtFile = new System.Windows.Forms.Button();
             this.textSpeedComboBox = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.label3 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -100,13 +100,13 @@ namespace DigitalSignage.Windows
             // 
             // button8
             // 
-            this.button8.Enabled = false;
             this.button8.Location = new System.Drawing.Point(6, 121);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(101, 23);
             this.button8.TabIndex = 39;
             this.button8.Text = "Reset Directory";
             this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.buttonResetDir_Click);
             // 
             // button7
             // 
@@ -439,6 +439,28 @@ namespace DigitalSignage.Windows
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Footer";
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "CUSTOM MESSAGE",
+            "RED",
+            "AMBER",
+            "GREEN"});
+            this.comboBox1.Location = new System.Drawing.Point(74, 52);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 43;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 55);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 42;
+            this.label3.Text = "Day Type";
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(113, 76);
@@ -490,28 +512,6 @@ namespace DigitalSignage.Windows
             this.button1.Text = "Back";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.buttonBack_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 55);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 13);
-            this.label3.TabIndex = 42;
-            this.label3.Text = "Day Type";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "CUSTOM MESSAGE",
-            "RED",
-            "AMBER",
-            "GREEN"});
-            this.comboBox1.Location = new System.Drawing.Point(74, 52);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 43;
             // 
             // FormSettingWindow
             // 

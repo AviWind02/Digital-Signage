@@ -55,7 +55,7 @@ namespace DigitalSignage.Windows
 
             mediaWindow.Hide();
             dualWriter.StartLogging();
-            buttonStart.Enabled = isnitialize;
+            buttonStart.Enabled = _isInitialize;
 
             //if (directoryManager.CheckMediaFolders())
             //{//If files are already in just skip the other check
@@ -68,6 +68,8 @@ namespace DigitalSignage.Windows
             mediaManager.LoadFiles();
             buttonStart.Enabled = true; // Functions above have a check if something fails it'll return;
         }
+
+
 
         private void buttonInitialize_Click(object sender, EventArgs e)
         {
@@ -94,6 +96,15 @@ namespace DigitalSignage.Windows
             {
                 Console.WriteLine($"Error in Loading Media: {ex.Message}");
                 return; // Prevent further execution if an error occurs
+            }
+        }
+        public void NeedingInitialize()
+        {
+            if (GlobalVariables.IsNeedingInitialize)
+            {
+                _isInitialize = false;
+                buttonStart.Enabled = false;
+                GlobalVariables.IsNeedingInitialize = false;
             }
         }
         public string EnsureBasePath()
@@ -146,7 +157,6 @@ namespace DigitalSignage.Windows
 
         private void buttonSettings_Click(object sender, EventArgs e)
         {
-
             mediaWindow.ShowSettingsWindow();
         }
 

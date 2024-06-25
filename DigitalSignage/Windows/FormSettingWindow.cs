@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace DigitalSignage.Windows
@@ -17,6 +18,7 @@ namespace DigitalSignage.Windows
 
         private bool readyToChange;
 
+        private FormStartWindow startWindow;
         private RegistrationManager registrationManager;
         private DirectoryManager directoryManager;
         private LevelConverter levelConverter;
@@ -138,7 +140,7 @@ namespace DigitalSignage.Windows
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            this.Close();
         }
 
         private void buttonSaveValues_Click(object sender, EventArgs e)
@@ -169,30 +171,8 @@ namespace DigitalSignage.Windows
 
         private void buttonSetFooterText_Click(object sender, EventArgs e)
         {
-            if(comboBox1.SelectedItem == null)
-            {
-                return;                
-            }
+            mediaWindow.UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(DirectoryManager.GetBasePath()));
 
-            if(comboBox1.SelectedItem.ToString() == "RED")
-            {
-                mediaWindow.UpdateScrollingText("Today is a RED day! - Please refrain from going outdoors!", "RED");
-            }
-
-            else if (comboBox1.SelectedItem.ToString() == "AMBER")
-            {
-                mediaWindow.UpdateScrollingText("Today is an AMBER day! - Hard surfaces ONLY!", "AMBER");
-            }
-
-            else if (comboBox1.SelectedItem.ToString() == "GREEN")
-            {
-                mediaWindow.UpdateScrollingText("Today is a GREEN day! - Grassy areas are permitted!", "GREEN");
-            }
-
-            else
-            {
-                mediaWindow.UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(directoryManager.GetBasePath()));
-            }         
 
 
         }
@@ -221,6 +201,48 @@ namespace DigitalSignage.Windows
             GlobalVariables.DelayPerSlide = Convert.ToInt32(multiplier);
             textBoxSlideDelay.Text = Convert.ToString(multiplier);// This for the reg backend I was already doing this before so might as well just keep it
             Console.WriteLine("Slide Delay adjusted(Seconds): " + multiplier);
+
+        }
+        private bool AskForRestart()
+        {
+
+            DialogResult dialogResult = System.Windows.Forms.MessageBox.Show(
+                "To change this now, you would need to restart. Would you like to exit the app?",
+                "Restart Required",
+                MessageBoxButtons.YesNo);
+
+            return dialogResult == DialogResult.Yes;
+        }
+
+
+        private void buttonResetDir_Click(object sender, EventArgs e)
+        {
+            string basepath;
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.Description = "Select a folder";
+                folderDialog.ShowNewFolderButton = true;
+
+                DialogResult result = folderDialog.ShowDialog();
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
+                {
+                    basepath = folderDialog.SelectedPath;
+                    DirectoryManager.SetBasePath(basepath);
+                    Console.WriteLine($"Selected folder: {basepath}");
+                    configuration.SaveFilePath();
+                }
+                else
+                {
+                    Console.WriteLine("No folder selected.");
+                }
+            }
+
+            GlobalVariables.IsNeedingInitialize = true;
+
+            if(AskForRestart())
+            {
+                Environment.Exit(0);
+            }
 
         }
     }

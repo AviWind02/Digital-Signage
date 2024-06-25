@@ -25,7 +25,13 @@ namespace DigitalSignage.Utilities
         private static string[][] _powerPointFiles;
         private static string _FilePath;
 
-        
+        private static bool _isNeedingInitialize;
+
+        public static bool IsNeedingInitialize
+        {
+            get { return _isNeedingInitialize; }
+            set { _isNeedingInitialize = value; }
+        }
         public static bool StopMedia
         {
             get { return _stopMedia; }
