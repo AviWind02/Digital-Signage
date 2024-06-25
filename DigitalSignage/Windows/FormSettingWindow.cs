@@ -138,7 +138,7 @@ namespace DigitalSignage.Windows
 
         private void buttonOpenTxtFile_Click(object sender, EventArgs e)
         {
-            directoryManager.CreateAndModifyTxtFile(directoryManager.GetBasePath(), "FooterText");
+            directoryManager.CreateAndModifyTxtFile(DirectoryManager.GetBasePath(), "FooterText");
         }
         private void buttonOpenLogs_Click(object sender, EventArgs e)
         {
@@ -183,7 +183,7 @@ namespace DigitalSignage.Windows
 
         private void buttonSetFooterText_Click(object sender, EventArgs e)
         {
-            mediaWindow.UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(directoryManager.GetBasePath()));
+            mediaWindow.UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(DirectoryManager.GetBasePath()));
 
         }
 

@@ -44,9 +44,6 @@ namespace DigitalSignage
         public MainWindow()
         {
             InitializeComponent();
-  
-
-
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -69,10 +66,11 @@ namespace DigitalSignage
             delayTimer = new DispatcherTimer();
             delayTimer.Interval = TimeSpan.FromSeconds(1);
             delayTimer.Tick += DelayTimerTick;
-
-            StartScrollingTextAnimation();
-            UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(directoryManager.GetBasePath()));
-
+            if (FormStartWindow.IsInitialize())
+            {
+                StartScrollingTextAnimation();
+                UpdateScrollingText(directoryManager.ReadTxtFileWithLogging(DirectoryManager.GetBasePath()));
+            }
         }
 
         public void ShowSettingsWindow()
@@ -131,7 +129,7 @@ namespace DigitalSignage
         {
             // Set the slide show flag to true
             isSlidePlaying = true;
-            string baseFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+            string baseFolderPath = DirectoryManager.GetBasePath();
             baseFolderPath = System.IO.Path.Combine(baseFolderPath, DateTime.Now.ToString("dddd"));
             string powerpointImagesFolderPath = System.IO.Path.Combine(baseFolderPath, "PowerPoint\\PowerPointImages");
 

@@ -33,6 +33,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.marker = new System.Windows.Forms.Label();
             this.labelV = new System.Windows.Forms.Label();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.SuspendLayout();
             // 
             // buttonInitialize
@@ -115,5 +116,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label marker;
         private System.Windows.Forms.Label labelV;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }

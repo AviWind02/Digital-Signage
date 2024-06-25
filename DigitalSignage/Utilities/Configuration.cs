@@ -21,6 +21,7 @@ namespace DigitalSignage.Utilities
             GlobalVariables.PowerpointChance = registrationManager.ReadRegistryValue("PowerPointChance");
             GlobalVariables.VideoChance = registrationManager.ReadRegistryValue("VideoChance");
             GlobalVariables.DelayPerSlide = registrationManager.ReadRegistryValue("Slide Delay");
+            GlobalVariables.FilePath = registrationManager.ReadRegistryValueString("File Path");
         }
 
         public void SaveConfiguration()
@@ -30,6 +31,14 @@ namespace DigitalSignage.Utilities
             registrationManager.WriteRegistryValue("PowerPointChance", GlobalVariables.PowerpointChance);
             registrationManager.WriteRegistryValue("VideoChance", GlobalVariables.VideoChance);
             registrationManager.WriteRegistryValue("Slide Delay", GlobalVariables.DelayPerSlide);
+            registrationManager.WriteRegistryValueAsString("File Path", GlobalVariables.FilePath);
+
         }
+
+        public void SaveFilePath()
+        {
+            registrationManager.WriteRegistryValueAsString("File Path", GlobalVariables.FilePath);
+        }
+
     }
 }

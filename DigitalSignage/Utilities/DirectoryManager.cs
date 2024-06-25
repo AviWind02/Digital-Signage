@@ -12,11 +12,17 @@ namespace DigitalSignage.Utilities
 {
     internal class DirectoryManager
     {
-        public string GetBasePath()
+
+
+        public static string GetBasePath()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Digital-Signage");
+            return GlobalVariables.FilePath;
         }
-   
+        public static void SetBasePath(string path)
+        {
+            GlobalVariables.FilePath = path;
+        }
+    
         public void OpenDirectory()
         {
             string baseFolderPath = GetBasePath();

@@ -23,7 +23,9 @@ namespace DigitalSignage.Utilities
         private static int _maxVideoPlaybackCount = 5; // Set this to the count after which the media type should switch.
 
         private static string[][] _powerPointFiles;
+        private static string _FilePath;
 
+        
         public static bool StopMedia
         {
             get { return _stopMedia; }
@@ -81,6 +83,10 @@ namespace DigitalSignage.Utilities
             get { return _delayPerSlide; }
             set { _delayPerSlide = value; }
         }
-
+        public static string FilePath
+        {
+            get { return _FilePath; }
+            set { _FilePath = value; }
+        }
     }
 }

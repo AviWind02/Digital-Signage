@@ -22,8 +22,13 @@ namespace DigitalSignage.Windows
         private MainWindow mediaWindow;
         private DualWriter dualWriter;
 
-        private bool isnitialize;
+        private static bool _isInitialize;
 
+
+        public static bool IsInitialize()
+        {
+            return _isInitialize;
+        }
         public FormStartWindow(MainWindow _mediaWindow)
         {
             InitializeComponent();
@@ -31,7 +36,7 @@ namespace DigitalSignage.Windows
 
             AllocConsole();
 
- 
+
 
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -50,11 +55,12 @@ namespace DigitalSignage.Windows
 
             mediaWindow.Hide();
             dualWriter.StartLogging();
-            buttonStart.Enabled = isnitialize;
+            buttonStart.Enabled = _isInitialize;
 
-            if (directoryManager.CheckMediaFolders()){//If files are already in just skip the other check
-                loadfiles();
-            }
+            //if (directoryManager.CheckMediaFolders())
+            //{//If files are already in just skip the other check
+            //    loadfiles();
+            //}
 
         }
         void loadfiles()
@@ -67,22 +73,54 @@ namespace DigitalSignage.Windows
         {
             try
             {
-             
+                configuration.LoadConfiguration();
+
+                EnsureBasePath();
+
+
                 directoryManager.Run();// Always do this 
                 registrationManager.CreateMainDirectory();// and this too
-            
-                if (!areFilesPlacedInFolder() || !directoryManager.CheckMediaFolders())
+                if (!AreFilesPlacedInFolder() || !directoryManager.CheckMediaFolders())
                 {
                     return; // Exit if files are not placed in the folder
                 }
 
                 loadfiles();
+
+                _isInitialize = true;
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in Loading Media: {ex.Message}");
                 return; // Prevent further execution if an error occurs
             }
+        }
+        public string EnsureBasePath()
+        {
+            string basepath = DirectoryManager.GetBasePath();
+            if (string.IsNullOrEmpty(basepath))
+            {
+                using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+                {
+                    folderDialog.Description = "Select a folder";
+                    folderDialog.ShowNewFolderButton = true;
+
+                    DialogResult result = folderDialog.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
+                    {
+                        basepath = folderDialog.SelectedPath;
+                        DirectoryManager.SetBasePath(basepath);
+                        Console.WriteLine($"Selected folder: {basepath}");
+                        configuration.SaveFilePath();
+                    }
+                    else
+                    {
+                        Console.WriteLine("No folder selected.");
+                    }
+                }
+            }
+            return basepath;
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
@@ -117,7 +155,7 @@ namespace DigitalSignage.Windows
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        private bool areFilesPlacedInFolder()
+        private bool AreFilesPlacedInFolder()
         {
             DialogResult dialogResult = MessageBox.Show("Have you placed media into the folder?", "Aether Corp", MessageBoxButtons.YesNo);
             return dialogResult == DialogResult.Yes;
