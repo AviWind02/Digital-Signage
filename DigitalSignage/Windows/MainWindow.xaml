@@ -13,10 +13,11 @@
     <Grid>
         <Image x:Name="imageControl" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
         <MediaElement x:Name="mediaElement" Stretch="Fill"  HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual" MediaEnded="MediaElement_MediaEnded"/>
+        <Rectangle HorizontalAlignment="Center" Height="108" Margin="0,972,0,0" VerticalAlignment="Top" Width="1920" Fill="#FF404879"/>
 
         <!-- Scroll Box for News Ticker -->
         <Canvas VerticalAlignment="Top" Height="110" Margin="0,954,0,0">
-            <TextBlock x:Name="scrollingText" Text="Your scrolling text here" FontSize="24" Foreground="Black">
+            <TextBlock x:Name="scrollingText" Text="Your scrolling text here" FontSize="48" Foreground="White" FontFamily="Verdana" HorizontalAlignment="Center" Canvas.Top="40" VerticalAlignment="Top">
                 <TextBlock.RenderTransform>
                     <TranslateTransform/>
                 </TextBlock.RenderTransform>

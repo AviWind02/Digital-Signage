@@ -67,12 +67,12 @@ namespace DigitalSignage.Windows
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.buttonOpenTxtFile = new System.Windows.Forms.Button();
-            this.labelCustomTextSpeedScroll = new System.Windows.Forms.Label();
-            this.textBoxCustomTextSpeedScroll = new System.Windows.Forms.TextBox();
             this.textSpeedComboBox = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.label3 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -426,10 +426,10 @@ namespace DigitalSignage.Windows
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.buttonOpenTxtFile);
-            this.groupBox1.Controls.Add(this.labelCustomTextSpeedScroll);
-            this.groupBox1.Controls.Add(this.textBoxCustomTextSpeedScroll);
             this.groupBox1.Controls.Add(this.textSpeedComboBox);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Location = new System.Drawing.Point(298, 168);
@@ -461,26 +461,6 @@ namespace DigitalSignage.Windows
             this.buttonOpenTxtFile.UseVisualStyleBackColor = true;
             this.buttonOpenTxtFile.Click += new System.EventHandler(this.buttonOpenTxtFile_Click);
             // 
-            // labelCustomTextSpeedScroll
-            // 
-            this.labelCustomTextSpeedScroll.AutoSize = true;
-            this.labelCustomTextSpeedScroll.Location = new System.Drawing.Point(6, 54);
-            this.labelCustomTextSpeedScroll.Name = "labelCustomTextSpeedScroll";
-            this.labelCustomTextSpeedScroll.Size = new System.Drawing.Size(103, 13);
-            this.labelCustomTextSpeedScroll.TabIndex = 36;
-            this.labelCustomTextSpeedScroll.Text = "Text Speed Custom ";
-            this.labelCustomTextSpeedScroll.Visible = false;
-            // 
-            // textBoxCustomTextSpeedScroll
-            // 
-            this.textBoxCustomTextSpeedScroll.Enabled = false;
-            this.textBoxCustomTextSpeedScroll.Location = new System.Drawing.Point(108, 50);
-            this.textBoxCustomTextSpeedScroll.Name = "textBoxCustomTextSpeedScroll";
-            this.textBoxCustomTextSpeedScroll.Size = new System.Drawing.Size(87, 20);
-            this.textBoxCustomTextSpeedScroll.TabIndex = 35;
-            this.textBoxCustomTextSpeedScroll.Visible = false;
-            this.textBoxCustomTextSpeedScroll.TextChanged += new System.EventHandler(this.textBoxCustomTextSpeedScroll_TextChanged);
-            // 
             // textSpeedComboBox
             // 
             this.textSpeedComboBox.Enabled = false;
@@ -510,6 +490,28 @@ namespace DigitalSignage.Windows
             this.button1.Text = "Back";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.buttonBack_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 55);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 42;
+            this.label3.Text = "Day Type";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "CUSTOM MESSAGE",
+            "RED",
+            "AMBER",
+            "GREEN"});
+            this.comboBox1.Location = new System.Drawing.Point(74, 52);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 43;
             // 
             // FormSettingWindow
             // 
@@ -573,8 +575,6 @@ namespace DigitalSignage.Windows
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button buttonOpenTxtFile;
-        private System.Windows.Forms.Label labelCustomTextSpeedScroll;
-        private System.Windows.Forms.TextBox textBoxCustomTextSpeedScroll;
         private System.Windows.Forms.ComboBox textSpeedComboBox;
         private System.Windows.Forms.Label label10;
         private ToolTip toolTip1;
@@ -587,5 +587,7 @@ namespace DigitalSignage.Windows
         private ComboBox comboBoxDelay;
         private ComboBox comboBoxVideoRate;
         private ComboBox comboBoxPPTRate;
+        private ComboBox comboBox1;
+        private Label label3;
     }
 }

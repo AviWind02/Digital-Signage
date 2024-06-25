@@ -373,9 +373,33 @@ namespace DigitalSignage
         }
 
 
-        public void UpdateScrollingText(string newText)
+        public void UpdateScrollingText(string newText, string day = "")
         {
             //Update the text
+
+            if (day == "RED")
+            {
+                scrollingText.Foreground = Brushes.Red;
+
+            }
+
+            if (day == "AMBER")
+            {
+                scrollingText.Foreground = Brushes.Orange;
+
+            }
+
+            if (day == "GREEN")
+            {
+                scrollingText.Foreground = Brushes.LimeGreen;
+
+            }
+
+            if(day == "")
+            {
+                scrollingText.Foreground = Brushes.White;
+            }
+
             scrollingText.Text = newText;
 
         }

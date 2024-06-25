@@ -55,7 +55,7 @@ namespace DigitalSignage.Windows
 
             mediaWindow.Hide();
             dualWriter.StartLogging();
-            buttonStart.Enabled = _isInitialize;
+            buttonStart.Enabled = isnitialize;
 
             //if (directoryManager.CheckMediaFolders())
             //{//If files are already in just skip the other check
