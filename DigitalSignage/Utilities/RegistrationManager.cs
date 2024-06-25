@@ -65,7 +65,7 @@ namespace DigitalSignage.Utilities
         public string ReadRegistryValueString(string keyName)
         {
             Console.WriteLine($"Attempting to read registry value for '{keyName}'...");
-            string defaultValue = "0";
+            string defaultValue = null;
             try
             {
                 using (RegistryKey key = Registry.CurrentUser.OpenSubKey(BaseKeyPath))
